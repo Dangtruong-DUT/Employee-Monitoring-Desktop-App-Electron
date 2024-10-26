@@ -1,0 +1,22 @@
+.homepage-container {
+    height: 100%;
+}
+.homepage__taskbar {
+    display: flex;
+    background-color: var(--background-blue-color);
+    height: 100%;
+    min-height: 636px;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.taskbar-list__top {
+    list-style: none;
+}
+
+.taskbar__item {
+    color: var(--white-color);
+    font-size: medium;
+}
+.taskbar-list__bottom {
+    list-style: none;
+}

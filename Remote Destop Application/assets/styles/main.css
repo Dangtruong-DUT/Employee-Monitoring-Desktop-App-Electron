@@ -1,0 +1,247 @@
+iframe {
+    border: none; /* Xóa đường viền của iframe */
+    flex: 3;
+    min-width: 900px;
+    min-height: 1050px;
+    top: 0;
+    left: 0;
+}
+.min-font-size {
+    font-size: 12px;
+}
+.text-color--primary {
+    color: var(--primary-color);
+}
+.warnning{
+    color:red;
+}
+.spacer {
+    margin: 1rem;
+}
+
+/*Modal*/
+.modal {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    animation: fadeIn linear 0.5;
+}
+.modal__overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.4);
+}
+.modal__body {
+    --growth-from: 0.7;
+    --growth-to: 1;
+    margin: auto;
+    position: relative;
+    z-index: 1;
+    border-radius: 5px;
+    animation: growth linear  0.1s;
+}
+
+/* button*/
+.btn {
+    min-width: 142px;
+    min-height: 36px;
+    text-decoration: none;
+    border: none;
+    border-radius: 0.7rem;
+    font-size: small;
+    padding: 0 12px;
+    outline: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+.btn.btn--primary {
+    color: var(--white-color);
+    background-color: var(--primary-color);
+}
+.btn.btn--disabled {
+    cursor: default;
+    background-color: #c3c3c3;
+    color: #ccc ;
+}
+.btn.btn--normal:hover {
+    background-color: rgba(8, 24, 146, 0.3)
+}
+.btn--size-S {
+   max-width: 90px;
+   max-height: 14.4px;
+   text-decoration: none;
+   background-color: rgb(10, 78, 130,0.6) ;
+   color: var(--white-color);
+   padding: 0.4rem 2.5rem;
+   border-radius: 5px;
+}
+.btn--size-S:hover {
+    color: rgb(255, 255, 255,0.3);
+}
+/* Selection */
+.select-input {
+    min-width: 120px;
+    padding: 0 12px;
+    border-radius: 2px;
+    background-color: var(--white-color);
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.select-iput__label {
+    font-size: 1.4 rem;
+}
+/*form*/
+.form-group__radios {
+    display: flex;
+    align-items: center; 
+}
+.form-group__radios .form-lable {
+    font-weight: normal;
+    margin: 0 0 0 4px;
+
+}
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin: 2rem 0;
+    position: relative;
+}
+.form-group .form-control {
+    height: 3rem;
+    outline: none;
+    border: 1px solid var(--border-color);
+    padding: 0.5rem 1rem;
+    border-radius: 0.7rem;
+} 
+ .form-control:focus{
+    outline:none;
+    border:  1px solid var(--primary-color);
+
+}
+.form-control:focus ~ .form-label {
+    display: block;
+    animation: growth ease-in-out 1s;
+    color: var(--primary-color);
+
+}
+input:focus::placeholder {
+    color: transparent; /* Placeholder biến mất */
+}
+.form-control:hover {
+    border: 1px solid var(--primary-color);
+}
+.form-control::placeholder {
+    font-size: small;     
+    font-family: Arial;  
+    color: var(--grey--color);         
+    font-weight: 500;
+}
+
+.form-label {
+    font-size: small;
+    font-weight: normal;
+    margin: 0 0 0.4rem 0;
+    position: absolute;
+    top:-10px;
+    left: 10px;
+    background-color: var(--white-color);
+    display: none;
+    color: var(--grey--color);
+}
+.title {
+    color: var(--black-color);
+    font-size: x-large;
+    font-weight: 600;
+}
+.desc {
+    color: var(--grey--color);
+}
+
+
+.form-submit {
+    align-items: center;
+    width: 100%;
+}
+.invalid .form-control {
+    border-color: red ;
+    outline: none !important;
+}
+.invalid .form-message {
+    color:red;
+}
+.required {
+    color:red;
+    margin-left: 2px;
+}
+
+/* drop down */
+.list-contaner {
+    position: absolute;
+    top:104%;
+    border-radius: 4px;
+    min-width: 200px;
+    background-color: var(--background-dropdown-color);
+    animation: faceIn ease-in 0.5s;
+    display: none;
+    z-index: 10;
+}
+.list-contaner::before {
+    top: -13px;
+    left: 12px;
+    position: absolute;
+    width: 0;
+    height: 0;
+    content: "";
+    display: block;
+    border: 7px solid ;
+    border-color: transparent transparent var(--background-dropdown-color) transparent;
+}
+ul.list-option {
+    list-style: none;
+}
+.list-option__item {
+    padding: 1rem 1rem;
+}
+.link-item {
+    text-decoration: none;
+}
+.list-option__item {
+    width: 100%;
+    border-bottom: 0.5px solid var(--border-color);
+}
+.list-option__item:hover {
+    background-color: var(--focus--color);
+}
+/*drop down type 2*/
+.dropdown-container {
+    top: 95%;
+    min-width: 240px;
+    position: absolute;
+    background-color: var(--white-color);
+    z-index: 10;
+    border: 1px solid var(--border-color);
+    display: flex;
+    justify-content: center; 
+    display: none;
+    animation: faceIn ease-in 0.5s;
+}
+li.dropdown-list__option {
+    border-bottom: 1px solid var(--border-color);
+    padding: 1rem 0;
+}
+ul.dropdown-list {
+    list-style:square;
+    color: var(--black-color);
+    padding-left: 3rem;
+}
+li.dropdown-list__option:hover .link-item {
+    color: var(--primary-color);
+}
+

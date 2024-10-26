@@ -1,0 +1,30 @@
+{
+  "name": "remote-desktop-application",
+  "version": "1.0.0",
+  "description": "A desktop application that allows remote desktop access",
+  "main": "main.js",
+  "author": {
+    "name": "3anhtuong"
+  },
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
+  },
+  "dependencies": {
+    "electron-squirrel-startup": "^1.0.1",
+    "json-server": "^1.0.0-beta.3"
+  },
+  "devDependencies": {
+    "@electron-forge/cli": "^7.5.0",
+    "@electron-forge/maker-deb": "^7.5.0",
+    "@electron-forge/maker-rpm": "^7.5.0",
+    "@electron-forge/maker-squirrel": "^7.5.0",
+    "@electron-forge/maker-zip": "^7.5.0",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.5.0",
+    "@electron-forge/plugin-fuses": "^7.5.0",
+    "@electron/fuses": "^1.8.0",
+    "@iconify-json/material-symbols-light": "^1.2.5",
+    "electron": "^33.0.2"
+  }
+}

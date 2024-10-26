@@ -1,0 +1,119 @@
+:root{
+    --focus--color:rgba(43, 94, 204, 0.3) ;
+    --primary-color:#274af6; ;
+    --grey-color:#7C8DB0;
+    --white-color:#fff;
+    --black-color:#000;
+    --border-color:#dbdbdb;
+    --background-color:#cff2f8cc;
+    --background--color-grey: #e8e8e8;
+    --btn-color:rgba(19, 71, 111, 0.5);
+    --header-top--height: 33px; 
+    --header--height: 220px;
+    --header-body--height:78px;
+    --max-width:1200px;
+    --background-blue-color: #1930a1;
+    --grey--color:#767474;
+}
+
+
+
+.icon {
+    display: inline-block;
+    width: 34px;
+    height: 34px;
+    -webkit-mask: no-repeat center / 100%;
+    mask: no-repeat center / 100%;
+    -webkit-mask-image: var(--svg);
+    mask-image: var(--svg);
+}
+
+
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 70.5%;
+    line-height: 1.6rem;
+    font-family: 'roboto', sans-serif;
+    box-sizing: border-box;
+    background-color: #f5f7f980;
+}
+
+/* Animation*/
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes growth {
+    from {
+        transform: scale(var(--growth-from));
+    }
+    to {
+        transform: scale(var(--growth-to));
+    }
+
+}
+
+/* responsive*/
+.grid{
+    max-width: 100%;
+    margin: 0 auto;
+    height: 100vh;
+}
+ 
+.grid__full-width {
+    width: 100%;
+}
+.grid__row {
+    display: flex;
+    margin-left: -12px;
+    margin-right: -12px;
+}
+.grid__column-2 {
+    padding-left:12px;
+    padding-right:12px;
+    width: 16.6666%;
+}
+.grid__column-10 {
+    padding-left:12px;
+    padding-right:12px;
+    width: 83.3334%;
+}
+.grid__column-3 {
+    padding-left:12px;
+    padding-right:12px;
+    width: 25%;
+}
+.grid__column-9 {
+    padding-left:12px;
+    padding-right:12px;
+    width: 75%;
+}
+.grid__column-4 {
+    padding-left:12px;
+    padding-right:12px;
+    width: 33.3334%;
+}
+.grid__column-8 {
+    padding-left:12px;
+    padding-right:12px;
+    width: 6.6666%;
+}
+.grid__column-7 {
+    padding-left:12px;
+    padding-right:12px;
+    width: 58.33%;
+}
+.grid__column-5 {
+    padding-left:12px;
+    padding-right:12px;
+    width: 41.67%;
+}
