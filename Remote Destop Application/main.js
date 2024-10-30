@@ -5,7 +5,9 @@ const url = require('url')
 const createBrowserWindow =  () => {
     const win = new BrowserWindow({
         width: 1200,
-        height: 700,
+        height: 750,
+        minHeight: 750,
+        minWidth: 1200,
         webPreferences: {
             preload: path.join(__dirname, 'preloads', 'Preload.js'),
             nodeIntegration: false,  // Tắt Node.js trong renderer
@@ -13,7 +15,7 @@ const createBrowserWindow =  () => {
         }
     })
     win.loadURL(url.format({
-        pathname: path.join(__dirname, 'hompage.html'),
+        pathname: path.join(__dirname,'views' ,'index.html'),
         protocol: "file:",
         slashes: true
     }))

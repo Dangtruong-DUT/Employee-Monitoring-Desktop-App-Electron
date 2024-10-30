@@ -1,0 +1,102 @@
+.adminSetting__main {
+    height: 100%;
+}
+.wellcomeTitleCotainer{
+    width: 100%;
+    border-bottom: 1px solid var(--border-color);
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+
+}
+.wellcomeTitleCotainer__title{
+    font-size: x-large;
+    font-weight: bold;
+    line-height: 3rem;
+}
+.wellcomeTitleCotainer__desc{
+    font-size: medium;
+    color: var(--text-grey-color);
+}
+.container-adminSetting{
+    margin-top: 1.5rem;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content:space-evenly;
+    max-height: 65vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.container-adminSetting::-webkit-scrollbar {
+    width: 8px; 
+}
+
+.container-adminSetting::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 5px; 
+}
+
+.container-adminSetting::-webkit-scrollbar-thumb {
+    background-color: #888; 
+    border-radius: 5px; 
+    border: 2px solid #f1f1f1;
+}
+
+.container-adminSetting::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+.group-setting{
+    width: 45%;
+    min-height: 300px;
+    padding: 1rem;
+    border: 1px solid var(--border-color);
+    margin-bottom: 1rem;
+    border-radius: 0.7rem;
+    box-shadow: -4px 1.2px 11px rgba(0, 0, 0, 0.2);
+    background-color: var(--white-color);
+    display: flex;
+    flex-direction: column;
+}
+.group__title{
+    font-size: large;
+    font-weight: bold;
+}
+.group__content{
+    margin-top: 2rem;
+}
+.group__item{
+    display: flex;
+    background-color: #dedede85;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+    border-radius: 0.5rem;
+}
+.group__item-title{
+    font-size: small;
+    font-weight: bold;
+    margin-right: 1rem;
+    min-width: 100px;
+}
+.group__item-content{
+    font-size: small;
+    font-weight: normal;
+}
+.group__item--img {
+    background-color: transparent;
+}
+.group-item__img {
+    border-radius: 0.8rem;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+.group__content--eventlog {
+    background-color: #080808;
+    flex: 1;
+    border-radius: 0.5rem;
+}
+.group__item--eventlog {
+    background-color: transparent ;
+    color: var(--white-color);
+}

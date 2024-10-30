@@ -1,4 +1,4 @@
-export default function html ([first, ...strings],...values)  {
+ function html ([first, ...strings],...values)  {
     return values.reduce(
         (acc,cur) => acc.concat(cur, strings.shift()),
         [first])
@@ -36,3 +36,4 @@ export function createStore(reducer) {
 }
 export const $ = document.querySelector.bind(document)
 export const $s = document.querySelectorAll.bind(document)
+export default html

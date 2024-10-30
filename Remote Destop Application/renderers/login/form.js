@@ -1,11 +1,9 @@
 import { connect } from '../../store.js'
 import html from '../../utils/core.js'
 import Validator from '../../utils/validator.js'
+import HomePage from '../home/HomePage.js'
 
-const connector = connect(({ User: { email, password } }) => ({ email, password }));
-
-
-function formLogin({email, password}) {
+function formLogin({ PersonInfor: { email, password }}) {
     return html`
         <form action="#" class="form" id="formlogin">
             <div class="title">Sign in</div>
@@ -44,7 +42,7 @@ export const FORMLOGINOBJECT = {
                 const response = await window.authAPI.login(data.email, data.password);
                 if (response.result == "true") {
                     console.log("Successfully logged in");
-                    dispatch("Loggin", data.email, data.password);
+                    dispatch("Loggin", data.email, data.password,HomePage);
                     // Kiểm tra quyền Notification
                     if (Notification.permission === 'granted') {
                         new Notification("Successfully logged in", { body: `Xin Chào ${data.email}` });
@@ -74,4 +72,4 @@ export const FORMLOGINOBJECT = {
             }
         }
 }
-export default connector(formLogin)
+export default connect()(formLogin)

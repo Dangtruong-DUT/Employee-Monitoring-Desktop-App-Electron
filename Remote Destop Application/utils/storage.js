@@ -19,11 +19,12 @@ export default {
     },
     getServer() {
         return JSON.parse(localStorage.getItem(SERVER_STORAGE_KEY)) || {
-            url: '',
-            port: '',
+            name: "",
+            admin: ""
            }
     },
     setServer(Server) {
         localStorage.setItem(SERVER_STORAGE_KEY, JSON.stringify(Server))
     }
+    
 }

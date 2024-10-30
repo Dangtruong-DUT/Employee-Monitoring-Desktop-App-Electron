@@ -1,3 +1,28 @@
+
+.icon {
+    display: inline-block;
+    width: 23px;
+    
+}
+.icon--normal {
+    fill:var( --color-icon--normal);
+    stroke:var( --color-icon--normal);
+}
+.icon--fillNone {
+    fill:none ;
+}
+
+.icon--active {
+    fill:var(--primary-color);
+    stroke: #5eb3fd;
+}
+.icon--Warning {
+    fill: yellow;
+}
+.icon--disabled {
+    fill: #9fa0a1;
+    stroke: #bbbbbb;
+}
 iframe {
     border: none; /* Xóa đường viền của iframe */
     flex: 3;
@@ -27,6 +52,7 @@ iframe {
     left: 0;
     bottom: 0;
     animation: fadeIn linear 0.5;
+    display: flex;
 }
 .modal__overlay {
     position: absolute;
@@ -39,9 +65,17 @@ iframe {
     --growth-to: 1;
     margin: auto;
     position: relative;
-    z-index: 1;
+    z-index: 4;
     border-radius: 5px;
     animation: growth linear  0.1s;
+    margin: auto;
+}
+.modal__btnExit {
+    font-size: large;
+    cursor: pointer;
+}
+.modal__btnExit:hover {
+    color: red;
 }
 
 /* button*/
@@ -70,19 +104,10 @@ iframe {
     color: #ccc ;
 }
 .btn.btn--normal:hover {
-    background-color: rgba(8, 24, 146, 0.3)
+    background-color: rgb(10, 27, 156)
 }
-.btn--size-S {
-   max-width: 90px;
-   max-height: 14.4px;
-   text-decoration: none;
-   background-color: rgb(10, 78, 130,0.6) ;
-   color: var(--white-color);
-   padding: 0.4rem 2.5rem;
-   border-radius: 5px;
-}
-.btn--size-S:hover {
-    color: rgb(255, 255, 255,0.3);
+.btn:hover {
+    background-color: rgb(221, 224, 242);
 }
 /* Selection */
 .select-input {
@@ -127,7 +152,7 @@ iframe {
 }
 .form-control:focus ~ .form-label {
     display: block;
-    animation: growth ease-in-out 1s;
+    animation: growth ease-in-out 0.2s;
     color: var(--primary-color);
 
 }
@@ -140,7 +165,7 @@ input:focus::placeholder {
 .form-control::placeholder {
     font-size: small;     
     font-family: Arial;  
-    color: var(--grey--color);         
+    color: var(--grey-color);         
     font-weight: 500;
 }
 
@@ -181,67 +206,77 @@ input:focus::placeholder {
     margin-left: 2px;
 }
 
-/* drop down */
-.list-contaner {
-    position: absolute;
-    top:104%;
-    border-radius: 4px;
-    min-width: 200px;
-    background-color: var(--background-dropdown-color);
-    animation: faceIn ease-in 0.5s;
+
+.combobox__dropdown{
+    position :absolute;
+    background-color: var(--white-color);
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+    min-width: 15rem;
+    z-index: 3;
+    border-radius: 0.5rem;
+    top:130%;
+    right: 50%;
     display: none;
-    z-index: 10;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.4);
 }
-.list-contaner::before {
-    top: -13px;
-    left: 12px;
-    position: absolute;
-    width: 0;
-    height: 0;
-    content: "";
-    display: block;
-    border: 7px solid ;
-    border-color: transparent transparent var(--background-dropdown-color) transparent;
-}
-ul.list-option {
+ul.combobox__dropdown-list{
     list-style: none;
 }
-.list-option__item {
-    padding: 1rem 1rem;
+.combobox__dropdown-item{
+    padding: 0.7rem 1.5rem 0.7rem  1.5rem;
+    font-size: small;
 }
-.link-item {
-    text-decoration: none;
+.combobox__dropdown-item:first-child{
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
 }
-.list-option__item {
-    width: 100%;
-    border-bottom: 0.5px solid var(--border-color);
+.combobox__dropdown-item:last-child{
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
 }
-.list-option__item:hover {
-    background-color: var(--focus--color);
+.combobox__dropdown-item:hover {
+    background-color: #3e517f23;
 }
-/*drop down type 2*/
-.dropdown-container {
-    top: 95%;
-    min-width: 240px;
-    position: absolute;
-    background-color: var(--white-color);
-    z-index: 10;
-    border: 1px solid var(--border-color);
-    display: flex;
-    justify-content: center; 
-    display: none;
-    animation: faceIn ease-in 0.5s;
-}
-li.dropdown-list__option {
-    border-bottom: 1px solid var(--border-color);
-    padding: 1rem 0;
-}
-ul.dropdown-list {
-    list-style:square;
-    color: var(--black-color);
-    padding-left: 3rem;
-}
-li.dropdown-list__option:hover .link-item {
-    color: var(--primary-color);
+.tooltip {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
 }
 
+ .tooltiptext {
+    visibility: hidden;
+    background-color: rgb(6, 105, 243);
+    color: #fff;
+    text-align: center;
+    padding: 5px;
+    border-radius: 5px;
+
+    position: absolute;
+    z-index: 1;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+/* Mũi tên nhỏ cho tooltip */
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* Dưới tooltip */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: black transparent transparent transparent;
+}
+
+/* Hiển thị tooltip khi hover */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}
+.hidden {
+    display: none!important;
+}

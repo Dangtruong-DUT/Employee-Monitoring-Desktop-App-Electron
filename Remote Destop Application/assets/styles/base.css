@@ -1,4 +1,5 @@
 :root{
+    --backgroud-viewPort:#f5f7f980;
     --focus--color:rgba(43, 94, 204, 0.3) ;
     --primary-color:#274af6; ;
     --grey-color:#7C8DB0;
@@ -12,21 +13,12 @@
     --header--height: 220px;
     --header-body--height:78px;
     --max-width:1200px;
-    --background-blue-color: #1930a1;
-    --grey--color:#767474;
+    --background-blue-color: #172c91;
+    --text-grey-color:#767474;
+    --blue-color:rgb(19, 253, 62);
+    --color-icon--normal:#7f8285;
 }
 
-
-
-.icon {
-    display: inline-block;
-    width: 34px;
-    height: 34px;
-    -webkit-mask: no-repeat center / 100%;
-    mask: no-repeat center / 100%;
-    -webkit-mask-image: var(--svg);
-    mask-image: var(--svg);
-}
 
 
 *{
@@ -36,7 +28,7 @@
 }
 
 html {
-    font-size: 70.5%;
+    font-size: 62.5%;
     line-height: 1.6rem;
     font-family: 'roboto', sans-serif;
     box-sizing: border-box;
@@ -77,6 +69,17 @@ html {
     margin-left: -12px;
     margin-right: -12px;
 }
+.grid__column-1 {
+    padding-left: 12px;
+    padding-right: 12px;
+    width: 8.3333%; /* 1/12 của 100% */
+}
+
+.grid__column-11 {
+    padding-left: 12px;
+    padding-right: 12px;
+    width: 91.6667%; /* 11/12 của 100% */
+}
 .grid__column-2 {
     padding-left:12px;
     padding-right:12px;
@@ -105,7 +108,7 @@ html {
 .grid__column-8 {
     padding-left:12px;
     padding-right:12px;
-    width: 6.6666%;
+    width: 66.666%;
 }
 .grid__column-7 {
     padding-left:12px;
