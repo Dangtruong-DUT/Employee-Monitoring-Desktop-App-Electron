@@ -66,6 +66,20 @@ function settingPage({PersonInfor}) {
                                     <a class="setting-item__value">${PersonInfor.name}</a>
                                 </div>
                             </div>
+                            <div class="group-setting__row enableSettingInfor " data-indexSettingChange="2">
+                                <div class="setting__item-left">
+                                    <div class="setting__item-container">
+                                        <svg class="icon icon--fillNone icon--normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g   stroke-width="1.5"><g  stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="#e8e8e8"><path d="M13.993 15H14m-4 0h.007M5 15a7 7 0 1 1 14 0a7 7 0 0 1-14 0"/><path d="M16.5 9.5v-3a4.5 4.5 0 1 0-9 0v3"/></g></svg>
+                                    </div>
+                                    <div class="setting__item-container">
+                                        <div class="setting-item__title">Password</div>
+                                        <div class="setting-item__decs">Đổi password để giễ giàng quản lý</div>
+                                    </div>
+                                </div>
+                                <div class="setting__item-rigth">
+                                    <a class="setting-item__value">********</a>
+                                </div>
+                            </div>
                             <div class="group-setting__row group-setting__row--block tooltip">
                                 <div class="setting__item-left">
                                     <div class="setting__item-container">

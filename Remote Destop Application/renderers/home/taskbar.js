@@ -1,6 +1,7 @@
 import * as Imports from '../../js/import.js';
+import { FORMJOINDERPART } from './modals/modalHomePage.js';
 const {connect, html } = Imports;
-
+import {FORMCHANGAVATAROBJECT,FORMCHANGEPASSWORD,FORMCHANGENAMEOBJECT} from './modals/modalSettings.js'
 
 function taskbar({homePage:{indexPage}}) {
     return html`
@@ -51,6 +52,8 @@ export const taskbarEvents = function (event) {
         let indexPage = taskbarItem.dataset.indexpage;
         if (event.type === 'click') {
             dispatch('GOTOINDEXPAGE', indexPage);
+            validaterForms(indexPage);
+
         }
     }
 }

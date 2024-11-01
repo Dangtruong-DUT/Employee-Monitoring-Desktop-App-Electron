@@ -1,5 +1,7 @@
 import * as Imports from '../../js/import.js';
-const {connect, html } = Imports;
+const {connect, html} = Imports;
+import {FORMCHANGAVATAROBJECT,FORMCHANGEPASSWORD,FORMCHANGENAMEOBJECT} from './modals/modalSettings.js';
+
 
 import login , {FORMLOGINOBJECT} from '../login/loginPage.js';
 
@@ -101,12 +103,24 @@ export const HeaderEvents = function (event) {
         if (indexPage == '-1') dispatch('LOGOUT', login, FORMLOGINOBJECT);
         else {
             dispatch('GOTOINDEXPAGE', indexPage);
+            validaterForms(indexPage);
         }
 
     };
     let btnReadAll = event.target.closest('.btnHeaderReadAll');
     if (btnReadAll) {
         dispatch('READALLNOTIGENARAL');
+
+        const mapStateToProps = (state) => ({
+            indexPage: state.homePage.indexPage
+        });
+        
+        const indexPage = connect(mapStateToProps)(Component);
+        console.log(indexPage)
+
+        validaterForms(indexPage)
+
+
         alert("Bạn vừa đọc tất cả thông báo!")
     }
     let notiItem = event.target.closest('.headerNotiItem');
@@ -114,5 +128,12 @@ export const HeaderEvents = function (event) {
         let indexNoti = notiItem.dataset.indexnoti;
         dispatch('READNOTIGENERAL', indexNoti);
         alert("Thông báo đã đọc: "+notiItem.querySelector('.title--noti').innerText)
+        
+       
+        const mapStateToProps = (state) => ({
+            indexPage: state.homePage.indexPage
+        });
+        
+        connect(mapStateToProps)(validaterForms)();
     }
 }

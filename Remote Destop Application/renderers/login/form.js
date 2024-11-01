@@ -1,7 +1,8 @@
-import { connect } from '../../store.js'
-import html from '../../utils/core.js'
-import Validator from '../../utils/validator.js'
 import HomePage from '../home/HomePage.js'
+import * as Imports from '../../js/import.js';
+import { FORMJOINDERPART } from '../home/modals/modalHomePage.js';
+const {validator,connect, html} = Imports;
+
 
 function formLogin({ PersonInfor: { email, password }}) {
     return html`
@@ -12,13 +13,13 @@ function formLogin({ PersonInfor: { email, password }}) {
             <div class="spacer"></div>
     
             <div class="form-group">
-                <input type="text" id='email' name='email' placeholder="Email" class='form-control' value = ${email}>
+                <input type="text" id='loginemail' name='email' placeholder="Email" class='form-control' value = ${email}>
                 <lable class="form-label" for='email'>Email<span class="required">*</span></lable>
                 <span class="form-message"></span>
             </div>
 
             <div class="form-group">
-                <input type="password" id='password' name='password' placeholder="Password" class='form-control'value = ${password}>
+                <input type="password" id='loginpassword' name='password' placeholder="Password" class='form-control'value = ${password}>
                 <lable class="form-label" for='password'>Password<span class="required">*</span></lable>
                 <span class="form-message"></span>
             </div>
@@ -32,10 +33,10 @@ export const FORMLOGINOBJECT = {
         formGroupSelector: '.form-group',
         errorSelector: '.form-message',
         rules: [
-            Validator.isRequired('#email'),
-            Validator.isEmail('#email'),
-            Validator.isRequired('#password'),
-            Validator.minLegth('#password', 6)
+            validator.isRequired('#loginemail'),
+            validator.isEmail('#loginemail'),
+            validator.isRequired('#loginpassword'),
+            validator.minLegth('#loginpassword', 6)
         ],
         onSubmit: async function (data) {
             try {
@@ -43,29 +44,19 @@ export const FORMLOGINOBJECT = {
                 if (response.result == "true") {
                     console.log("Successfully logged in");
                     dispatch("Loggin", data.email, data.password,HomePage);
+                    validaterForms(0);
+
                     // Kiểm tra quyền Notification
                     if (Notification.permission === 'granted') {
                         new Notification("Successfully logged in", { body: `Xin Chào ${data.email}` });
-                    } else if (Notification.permission !== 'denied') {
-                        Notification.requestPermission().then(permission => {
-                            if (permission === 'granted') {
-                                new Notification("Successfully logged in", { body: `Xin Chào ${data.email}` });
-                            }
-                        });
-                    }
+                    } 
+    
                 } else {
                     console.log("Failed to login");
-    
                     // Kiểm tra quyền Notification
                     if (Notification.permission === 'granted') {
                         new Notification("Failed to login", { body: `${data.email} hoặc ${data.password} không chính xác` });
-                    } else if (Notification.permission !== 'denied') {
-                        Notification.requestPermission().then(permission => {
-                            if (permission === 'granted') {
-                                new Notification("Failed to login", { body: `${data.email} hoặc ${data.password} không chính xác` });
-                            }
-                        });
-                    }
+                    } 
                 }
             } catch (error) {
                 console.error(error);

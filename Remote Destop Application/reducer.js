@@ -2,6 +2,7 @@ import storage from './utils/storage.js';
 import controller from './js/App.js';
 import Validator from './utils/validator.js';
 
+
 const init = {
    Server : storage.getServer(),
    States: {
@@ -115,15 +116,14 @@ const init = {
          isJoined: true,
       }
    ],
-  
 }
 
 
 const  actions = {
-    Loggin({User,States},email,password,HomePage) {
-        User.email =email;
-        User.password = password;
-        storage.setUser(User)
+    Loggin({PersonInfor,States,},email,password,HomePage) {
+      PersonInfor.email =email;
+      PersonInfor.password = password;
+        storage.setUser(PersonInfor)
         States.isLoggedIn = true;
         controller(HomePage);
     },
@@ -141,8 +141,22 @@ const  actions = {
     },
     READNOTIGENERAL({GeneralNotice},indexNoti) {
       GeneralNotice[indexNoti].isUnRead=false;
+    },
+    EXITDEPART({Departments},index) {
+      Departments.splice(index,1);
+    },
+    CHANGENAME({PersonInfor},name) {
+      PersonInfor.name = name;
+    },
+    CHANGEAVATAR({PersonInfor},avartar) {
+      PersonInfor.avartar = avartar;
+    },
+    CHANGEPASSWORD({PersonInfor},password) {
+      PersonInfor.password = password;
+    },
+    JOINDEPART() {
+      console.log("joining")
     }
-    
  }
 
 

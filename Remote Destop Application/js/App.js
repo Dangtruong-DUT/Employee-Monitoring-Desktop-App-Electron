@@ -1,12 +1,13 @@
-import * as Imports from './import.js';
-const { $, $s, attach, HomePage, Login, taskbarEvents, HeaderEvents ,connectPageEvents,settingPageEvents} = Imports;
 
-const root = $('#root')
+import * as Imports from './import.js';
+import { FORMCHANGAVATAROBJECT,FORMCHANGEPASSWORD,FORMCHANGENAMEOBJECT } from '../renderers/home/modals/modalSettings.js';
+const { $, $s, attach, Login, taskbarEvents, HeaderEvents ,
+    connectPageEvents,settingPageEvents,EventModalExitSession,FORMLOGINOBJECT,FORMJOINDERPART,validator} = Imports;
 
 const app = (function(){
     const properties = {
         currentPage: null,
-        root: null,
+        root: $('#root'),
     }
 
     // tim cha ngoai cung chua element
@@ -65,30 +66,44 @@ const app = (function(){
                 HeaderEvents(event);
                 connectPageEvents(event,getParent);
                 settingPageEvents(event);
+                EventModalExitSession(event,getParent);
             } 
             if (event.type == "focusin" || event.type == "focusout") {
-                console.log(event);
                 handleForm(event);
             }
         },
-        loadPage(handler,props,...args) {
-            attach(properties.currentPage, root);
-            if (handler && typeof handler =='function') handler(Object.assign({}, props, ...args));
-            initForm();
+        validaterForms(indexPage) {
+
+            requestAnimationFrame(() => {
+                if (indexPage==0) {
+                    validator(FORMJOINDERPART)
+                } else if (indexPage == -1) {
+                    validator(FORMLOGINOBJECT)
+                } else if (indexPage == 2) {
+                    validator(FORMCHANGAVATAROBJECT)
+                    validator(FORMCHANGEPASSWORD)
+                    validator(FORMCHANGENAMEOBJECT)
+                }
+                
+            })  
         },
-        controller (newPage, ...handlers) {
+        loadPage() {
+            attach(properties.currentPage, properties.root);
+            requestAnimationFrame(() => {
+                initForm();
+            });
+                
+        },
+        controller (newPage) {
             properties.currentPage =newPage;
-            if (handlers) this.loadPage(...handlers);
-                else this.loadPage();
-        },
-        init() {
-            attach(createView, body);
+            this.loadPage();
         },
         start () {
-            this.controller(HomePage)
+            this.controller(Login)
+            this.validaterForms(-1);
             root.onclick = this.handleEvent.bind(this)
-            root.onfocusin=this.handleEvent.bind(this);
-            root.onfocusout= this.handleEvent.bind(this);
+            root.addEventListener('focusin', this.handleEvent.bind(this), true);
+            root.addEventListener('focusout', this.handleEvent.bind(this), true);
         }
     }
      
@@ -96,6 +111,7 @@ const app = (function(){
 
 app.start();
 
+window.validaterForms = app.validaterForms.bind(app);
 export default app.controller.bind(app);
 
 

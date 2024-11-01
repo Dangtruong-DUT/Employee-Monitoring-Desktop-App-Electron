@@ -1,6 +1,5 @@
 //  object validator constructor
 export default function Validator (options) {
-    
     // tìm cha ngoài cùng chứa cả thẻ input và errorMessage
     function getParent (element, selector) {
         while (element.parentElement) {

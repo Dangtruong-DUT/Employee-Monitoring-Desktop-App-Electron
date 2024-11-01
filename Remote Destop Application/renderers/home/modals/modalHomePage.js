@@ -1,6 +1,6 @@
 import * as Imports from '../../../js/import.js';
 const {connect, html } = Imports;
-
+import Validator from '../../../utils/validator.js';
 function createModalHomePage({Departments}) {
     return html `
          <!--modal join session-->
@@ -21,16 +21,19 @@ function createModalHomePage({Departments}) {
                                     đầu nhận hỗ trợ.
                                 </p>
                             </div>
-                            <div class="auth-form__form">
-                                <div class="form-group">
-                                    <input type="text" id='email' name='email' class='form-control' placeholder="Mã phòng ban">
-                                    <lable class="form-label" for='email'>Mã phòng ban<span class="required">*</span></lable>
-                                    <span class="form-message"></span>
+                            <form id='formJoinDerpart'>
+                                <div class="auth-form__form">
+                                        <div class="form-group">
+                                            <input type="text" id='maPB' name='maPB' class='form-control' placeholder="Mã phòng ban">
+                                            <lable class="form-label" for='maPB'>Mã phòng ban<span class="required">*</span></lable>
+                                            <span class="form-message"></span>
+                                        </div>
+
                                 </div>
-                            </div>
-                            <div class="auth-form__controls">
-                                <button class="btn btn--primary btn--normal">Connect</button>
-                            </div>
+                                <div class="auth-form__controls">
+                                    <button type="submit" class="btn btn--primary btn--normal">Connect</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
@@ -61,7 +64,7 @@ function createModalHomePage({Departments}) {
                                             </div>
                                             <div class="auth-form__controls">
                                                 <button class="btn btn--modalbtnext  modal__btnExit">Cancel</button>
-                                                <button class="btn btn--primary btn--normal">Accept</button>
+                                                <button class="btn btn--primary btn--normal btnAcceptDeleteDepart">Accept</button>
                                             </div>
                                         </div>
                                     </div>
@@ -76,3 +79,29 @@ function createModalHomePage({Departments}) {
     `
 }
 export default connect()(createModalHomePage) 
+
+export const EventModalExitSession = function(e,findParent) {
+     //event accept delete Department
+     const btnDeleteSession = e.target.closest('.btnAcceptDeleteDepart');
+     if (btnDeleteSession) {
+         let modalContainer = findParent(btnDeleteSession,'.modal');
+         let indexSession = modalContainer.dataset.indexsession||-1;
+         modalContainer.classList.add('hidden')
+         dispatch("EXITDEPART", indexSession)
+         validaterForms(0)
+         
+     }
+}
+export const FORMJOINDERPART = {
+    form: '#formJoinDerpart',
+    formGroupSelector: '.form-group',
+    errorSelector: '.form-message',
+    rules: [
+        Validator.isRequired('#maPB'),
+    ],
+    onSubmit: function (data) {
+        console.log(data);
+        dispatch("JOINDEPART", data.maPB);
+        validaterForms(0)
+    }
+}

@@ -63,7 +63,6 @@ iframe {
 .modal__body {
     --growth-from: 0.7;
     --growth-to: 1;
-    margin: auto;
     position: relative;
     z-index: 4;
     border-radius: 5px;
@@ -180,6 +179,7 @@ input:focus::placeholder {
     display: none;
     color: var(--grey--color);
 }
+
 .title {
     color: var(--black-color);
     font-size: x-large;
@@ -279,4 +279,7 @@ ul.combobox__dropdown-list{
 }
 .hidden {
     display: none!important;
+}
+.invalid .form-control:focus~.form-label {
+    color: red;
 }
