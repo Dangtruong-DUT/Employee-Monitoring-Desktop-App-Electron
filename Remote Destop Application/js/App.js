@@ -1,15 +1,17 @@
 
 import * as Imports from './import.js';
-import { FORMCHANGAVATAROBJECT,FORMCHANGEPASSWORD,FORMCHANGENAMEOBJECT } from '../renderers/home/modals/modalSettings.js';
-const { $, $s, attach, Login, taskbarEvents, HeaderEvents ,
-    connectPageEvents,settingPageEvents,EventModalExitSession,FORMLOGINOBJECT,FORMJOINDERPART,validator} = Imports;
+import { FORMCHANGAVATAROBJECT, FORMCHANGEPASSWORD, FORMCHANGENAMEOBJECT } from '../renderers/home/modals/modalSettings.js';
+const { $, $s, attach, Login, taskbarEvents, HeaderEvents,
+    connectPageEvents, settingPageEvents, EventModalExitSession, FORMLOGINOBJECT, FORMJOINDERPART, validator } = Imports;
 
-const app = (function(){
+
+
+const app = (function () {
     const properties = {
         currentPage: null,
         root: $('#root'),
+        forms: [FORMCHANGAVATAROBJECT, FORMCHANGEPASSWORD, FORMCHANGENAMEOBJECT, FORMLOGINOBJECT, FORMJOINDERPART]
     }
-
     // tim cha ngoai cung chua element
     function getParent(element, selector) {
         while (element.parentElement) {
@@ -19,7 +21,7 @@ const app = (function(){
             element = element.parentElement
         }
     }
-    function handleForm (e) {
+    function handleForm(e) {
         // Kiểm tra nếu sự kiện xảy ra trên các input có class '.form-control'
         const inputElement = e.target.closest('.form-control');
         if (inputElement) {
@@ -32,16 +34,16 @@ const app = (function(){
         }
     }
     function handleModal(e) {
-         // su kien ấn btn exit modal
-         if (e.target.closest('.modal__btnExit')) {
+        // su kien ấn btn exit modal
+        if (e.target.closest('.modal__btnExit')) {
             let btnExitModal = e.target.closest('.modal__btnExit');
             let modal_parent = getParent(btnExitModal, ".modal");
             if (!modal_parent.classList.contains('hidden')) {
                 modal_parent.classList.add('hidden');
             }
         }
-         // su kien click ngoai pham vi modal
-         if (e.target.closest('.modal__overlay')) {
+        // su kien click ngoai pham vi modal
+        if (e.target.closest('.modal__overlay')) {
             let overlayElement = e.target.closest('.modal__overlay');
             let modal_parent = getParent(overlayElement, ".modal");
             if (!modal_parent.classList.contains('hidden')) {
@@ -59,59 +61,74 @@ const app = (function(){
     }
 
     return {
+        listenerNetwork() {
+            window.addEventListener('online', () => {
+                new Notification("Thông báo trạng thái kết nối mạng", { body: `Kết nối tới Internet thành công!` });
+                dispatch("ISONLINE");
+
+            });
+
+            window.addEventListener('offline', () => {
+                new Notification("Thông báo trạng thái kết nối mạng", { body: `Mất kết nối tới Internet!` });
+                dispatch("ISOFFLINE");
+
+            });
+        },
+        checkConnectWithInternet() {
+            if (navigator.onLine) {
+                dispatch("ISONLINE");
+            } else {
+                new Notification("Thông báo trạng thái kết nối mạng", { body: `Mất kết nối tới Internet!` });
+                dispatch("ISOFFLINE");
+            }
+        },
         handleEvent(event) {
-            if (event.type==="click"){
+            if (event.type === "click") {
                 taskbarEvents(event);
                 handleModal(event);
                 HeaderEvents(event);
-                connectPageEvents(event,getParent);
+                connectPageEvents(event, getParent);
                 settingPageEvents(event);
-                EventModalExitSession(event,getParent);
-            } 
+                EventModalExitSession(event, getParent);
+            }
             if (event.type == "focusin" || event.type == "focusout") {
                 handleForm(event);
             }
-        },
-        validaterForms(indexPage) {
 
-            requestAnimationFrame(() => {
-                if (indexPage==0) {
-                    validator(FORMJOINDERPART)
-                } else if (indexPage == -1) {
-                    validator(FORMLOGINOBJECT)
-                } else if (indexPage == 2) {
-                    validator(FORMCHANGAVATAROBJECT)
-                    validator(FORMCHANGEPASSWORD)
-                    validator(FORMCHANGENAMEOBJECT)
+            properties.forms.forEach((formObject) => {
+                if (formObject&&event.target.closest(formObject.form)) {
+                    new validator(formObject.form).onSubmit = formObject.onSubmit;
                 }
-                
-            })  
+            })
+
         },
         loadPage() {
             attach(properties.currentPage, properties.root);
             requestAnimationFrame(() => {
                 initForm();
             });
-                
+
         },
-        controller (newPage) {
-            properties.currentPage =newPage;
+        controller(newPage) {
+            properties.currentPage = newPage;
             this.loadPage();
         },
-        start () {
-            this.controller(Login)
-            this.validaterForms(-1);
-            root.onclick = this.handleEvent.bind(this)
+        start() {
+            this.checkConnectWithInternet();
+            this.controller(Login);
+            
+            this.listenerNetwork();
+            root.onclick = this.handleEvent.bind(this);
             root.addEventListener('focusin', this.handleEvent.bind(this), true);
             root.addEventListener('focusout', this.handleEvent.bind(this), true);
+
+           
         }
     }
-     
+
 })();
 
 app.start();
-
-window.validaterForms = app.validaterForms.bind(app);
 export default app.controller.bind(app);
 
 
