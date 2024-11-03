@@ -23,7 +23,11 @@ function pageAdminSettings({PersonInfor,Server,States,EventLogs}) {
                                     </div>
                                     <div class="group__item">
                                         <div class="group__item-title">Bộ phận</div>
-                                        <div class="group__item-content">${PersonInfor.department}</div>
+                                        <div class="group__item-content">
+                                        ${PersonInfor.departments.map(element => {
+                                            console.log(element);
+                                            return element.name;
+                                        }).join(", ")}</div>
                                     </div>
                                     <div class="group__item">
                                         <div class="group__item-title">
@@ -68,7 +72,7 @@ function pageAdminSettings({PersonInfor,Server,States,EventLogs}) {
                                 ${EventLogs.map(item => html`
                                     <div class="group__item group__item--eventlog">
                                         <div class="group__item-title">${item.title}</div>
-                                        <div class="group__item-content">${item.content+" "+item.time+" "+item.author}</div>
+                                        <div class="group__item-content">${item.content+";  Time: "+item.time+";  From: "+item.author}</div>
                                     </div>
                                     `
                                 )}

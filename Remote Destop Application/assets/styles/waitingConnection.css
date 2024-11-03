@@ -1,0 +1,24 @@
+.waitingConnection{
+    box-shadow: -6px -2px 10px #c2cfe7;
+    display: flex;
+    width: 80vh;
+    height: 70vh;
+    flex-direction: column;
+    margin: auto;
+    align-items: center;
+    background-color: var(--white-color);
+    border-radius: 1rem;
+    padding: 2rem;
+    margin-top: 5rem;
+    justify-content: space-around;
+}
+.waitingConnection__img{
+    width: 400px;
+    height:auto
+}
+.waitingConnection__title{
+    font-size: large;
+    font-weight: 500;
+}
+.icon--loading {
+}

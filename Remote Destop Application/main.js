@@ -39,26 +39,25 @@ app.on('window-all-closed', () => {
     }
 })
 
-   // Xử lý yêu cầu đăng nhập từ renderer
-ipcMain.handle('login', async (event, { email, password }) => {
+// Xử lý yêu cầu đăng nhập từ renderer
+ipcMain.handle('login', async (event,{ email, password }) => {
     try {
-      // Gửi yêu cầu đến mock server
-      const response = await fetch('http://localhost:3000/LOGIN',{
-        method: 'GET', // Hoặc 'POST', tùy vào yêu cầu của bạn
-        headers: {
-            'Cache-Control': 'no-cache', // Tắt cache
-        }
-    });
-  
-      // Nhận phản hồi từ mock server
-      const result = await response.json();
-  
-      // Trả kết quả về renderer process
-      return result;
+        const response = await fetch('http://localhost:3000/login', {
+            method: "GET",
+            headers: {
+                "Cache-Control": "no-cache",
+                "Content-Type": "application/json",
+            },
+            //body: JSON.stringify({ email, password }),
+        });
+
+        const result = await response.json();
+        return result;
+
     } catch (error) {
-      console.error('Error:', error);
-      // Trả phản hồi lỗi về renderer process nếu có lỗi
-      return { success: false, message: 'An error occurred during login!' };
+        console.error('Error:', error); 
+        return { success: false, message: 'An error occurred during login!' };
     }
-  });
+});
+
   

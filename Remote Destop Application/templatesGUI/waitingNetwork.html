@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com;">
+
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/styles/normalize.css">
+    <link rel="stylesheet" href="../assets/styles/base.css">
+    <link rel="stylesheet" href="../assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/SignIn.css">
+    <link rel="stylesheet" href="../assets/styles/homepage.css">
+    <link rel="stylesheet" href="../assets/styles/adminSetting.css">
+    <link rel="stylesheet" href="../assets/styles/settings.css">
+    <link rel="stylesheet" href="../assets/styles/waitingConnection.css">
+
+
+    <title>HomePage</title>
+</head>
+
+<body>
+    <div id="root" class="grid">
+        <div class="waitingConnection">
+            <div class="waitingConnection__img">
+                <img src="../assets/imgs/waitingConnection.png" class="waitingConnection__img" alt="imgConnection">
+            </div>
+            <div class="icon icon--loading">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g><rect width="2" height="5" x="11" y="1" fill="currentColor" opacity=".14"/><rect width="2" height="5" x="11" y="1" fill="currentColor" opacity=".29" transform="rotate(30 12 12)"/><rect width="2" height="5" x="11" y="1" fill="currentColor" opacity=".43" transform="rotate(60 12 12)"/><rect width="2" height="5" x="11" y="1" fill="currentColor" opacity=".57" transform="rotate(90 12 12)"/><rect width="2" height="5" x="11" y="1" fill="currentColor" opacity=".71" transform="rotate(120 12 12)"/><rect width="2" height="5" x="11" y="1" fill="currentColor" opacity=".86" transform="rotate(150 12 12)"/><rect width="2" height="5" x="11" y="1" fill="currentColor" transform="rotate(180 12 12)"/><animateTransform attributeName="transform" calcMode="discrete" dur="0.75s" repeatCount="indefinite" type="rotate" values="0 12 12;30 12 12;60 12 12;90 12 12;120 12 12;150 12 12;180 12 12;210 12 12;240 12 12;270 12 12;300 12 12;330 12 12;360 12 12"/></g></svg>
+            </div>
+            <div class="waitingConnection__title">
+                <p>
+                    Vui lòng kết nối thiết bị của bạn với Internet để sử dụng dịch vụ!
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

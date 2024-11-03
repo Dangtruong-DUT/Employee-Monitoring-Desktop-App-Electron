@@ -30,7 +30,7 @@ export function createStore(reducer) {
         },
         dispatch(action,...args) {
             state = reducer(state, action, args);
-            render()
+            render();
         }
     }
 

@@ -1,5 +1,5 @@
 import * as Imports from '../../js/import.js';
-const {connect, html } = Imports;
+const { html } = Imports;
 
 
 import header from './header.js'

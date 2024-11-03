@@ -175,15 +175,19 @@ ul.hompage-header__listItem{
     position: relative;
 }
 .header__count-noti{
-    display: block;
+    display: flex;                  
+    align-items: center;           
+    justify-content: center;        
     position: absolute;
     background-color: #fd1313;
-    padding: 0px 2px 0 2px;
-    border-radius: 50%;
     color: var(--white-color);
     font-weight: bold;
-    left:17px;
-    top:-2px;
+    border-radius: 50%;            
+    width: 15px;
+    height: 15px;                 
+    font-size: 12px;               
+    left: 17px;
+    top: -2px;
 }
 .header__title::after {
     content: "";
@@ -329,14 +333,15 @@ ul.hompage-header__listItem{
     flex:1;
 
 }
-.boxSession{
-    background-color: #e2e5f3;
+.boxSession {
+    background-color: #d1d3d4;
     padding: 2rem;
     padding-bottom: 1rem;
     margin: auto;
     min-width: 234px;
     border-radius: 1rem;
     margin-top: 3rem;
+    box-shadow: -10px 10px 10px #d7c6c663;
 }
 .boxSession__header{
     display: flex;
@@ -439,9 +444,12 @@ ul.hompage-header__listItem{
 /* kết thúc phần main chứa session */
 
 /* phần main chứa notify */
-.homepage__notify-session{
-    height: 100%;
-    border-left: 1px solid var(--border-color);
+.homepage__notify-session {
+    margin: 1rem 0 0rem 0;
+    border-radius: 1.5rem;
+    background-color: #ffffff;
+    height: 97%;
+    border: 1px solid var(--border-color);
     padding-top: 3rem;
 }
 
@@ -459,11 +467,12 @@ ul.hompage-header__listItem{
     position: relative;
     display: flex;
     align-items: center;
-    background-color: #fff;
+    background-color: #eeedff;
     padding: 0.5rem;
     border-radius: 0.5rem;
     width: fit-content;
-    border: 1px solid VAR(--grey-color);
+    /* border: 1px solid VAR(--grey-color); */
+    box-shadow: -1px 1px 5px #9e9b9b73;
 
 }
 .notify__icon{
@@ -531,7 +540,7 @@ ul.hompage-header__listItem{
 }
 .separation {
     width: 100%;
-    border: 1px solid var(--text-grey-color);
+    border: 0.2px solid #d9cbcb63;
     margin-top: 1rem;
     margin-bottom: 2rem;
 }

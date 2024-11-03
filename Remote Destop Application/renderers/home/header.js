@@ -1,12 +1,29 @@
 import * as Imports from '../../js/import.js';
 const {connect, html} = Imports;
-import {FORMCHANGAVATAROBJECT,FORMCHANGEPASSWORD,FORMCHANGENAMEOBJECT} from './modals/modalSettings.js';
+import login from '../login/loginPage.js';
 
+  // Kết nối đến WebSocket server
+  const socket = new WebSocket('ws://localhost:8080');
 
-import login , {FORMLOGINOBJECT} from '../login/loginPage.js';
+  socket.onopen = () => {
+      console.log('Connected to WebSocket server');
+  };
 
+  socket.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data.message) {
+          console.log(data.message);
+      }
+      if (data.notification) {
+          console.log(data.notification);
+      }
+  };
 
-function header({States:{isAccessServer} ,PersonInfor:{avartar,name},GeneralNotice, homePage}) {
+  socket.onclose = () => {
+      console.log('Disconnected from WebSocket server');
+  };
+
+function header({States:{isAccessServer} ,PersonInfor:{avatar,name},GeneralNotice, homePage}) {
     return html`
          <!--header-->
                 <header class="hompage-header grid__row ">
@@ -72,7 +89,7 @@ function header({States:{isAccessServer} ,PersonInfor:{avartar,name},GeneralNoti
                         <!--Avatar& name User bỏ state online thì css sẽ tương ứng offline-->
                         <li class="hompage-header__item header__item--inforUser">
                             <img class="header__avatar"
-                                src=" ${avartar || 'https://cdn.icon-icons.com/icons2/2120/PNG/512/user_account_person_avatar_icon_131248.png'}"
+                                src=" ${avatar || 'https://cdn.icon-icons.com/icons2/2120/PNG/512/user_account_person_avatar_icon_131248.png'}"
                                 alt="">
                             <span class="header__title ${isAccessServer && 'state--online'} ">${name}</span>
                             <div class="combobox__dropdown header__dropdown">
@@ -92,35 +109,21 @@ function header({States:{isAccessServer} ,PersonInfor:{avartar,name},GeneralNoti
     `
 
 }
-
-
 export default connect()(header)
 
 export const HeaderEvents = function (event) {
     let comboboxItem = event.target.closest('.header-dropdown__item-infor');
     if (comboboxItem) {
         let indexPage = comboboxItem.dataset.indexpage;
-        if (indexPage == '-1') dispatch('LOGOUT', login, FORMLOGINOBJECT);
+        if (indexPage == '-1') dispatch('LOGOUT', login);
         else {
             dispatch('GOTOINDEXPAGE', indexPage);
-            validaterForms(indexPage);
         }
 
     };
     let btnReadAll = event.target.closest('.btnHeaderReadAll');
     if (btnReadAll) {
         dispatch('READALLNOTIGENARAL');
-
-        const mapStateToProps = (state) => ({
-            indexPage: state.homePage.indexPage
-        });
-        
-        const indexPage = connect(mapStateToProps)(Component);
-        console.log(indexPage)
-
-        validaterForms(indexPage)
-
-
         alert("Bạn vừa đọc tất cả thông báo!")
     }
     let notiItem = event.target.closest('.headerNotiItem');
@@ -128,12 +131,5 @@ export const HeaderEvents = function (event) {
         let indexNoti = notiItem.dataset.indexnoti;
         dispatch('READNOTIGENERAL', indexNoti);
         alert("Thông báo đã đọc: "+notiItem.querySelector('.title--noti').innerText)
-        
-       
-        const mapStateToProps = (state) => ({
-            indexPage: state.homePage.indexPage
-        });
-        
-        connect(mapStateToProps)(validaterForms)();
     }
 }

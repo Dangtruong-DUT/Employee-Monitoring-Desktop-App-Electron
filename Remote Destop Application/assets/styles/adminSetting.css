@@ -46,17 +46,19 @@
 .container-adminSetting::-webkit-scrollbar-thumb:hover {
     background-color: #555;
 }
-.group-setting{
+.group-setting {
     width: 45%;
     min-height: 300px;
     padding: 1rem;
-    border: 1px solid var(--border-color);
+    border: 0.01px solid var(--border-color);
     margin-bottom: 1rem;
     border-radius: 0.7rem;
-    box-shadow: -4px 1.2px 11px rgba(0, 0, 0, 0.2);
+    /* box-shadow: -4px 1.2px 11px rgba(0, 0, 0, 0.2); */
     background-color: var(--white-color);
     display: flex;
     flex-direction: column;
+    box-shadow: -10px 10px 10px #d7c6c663;
+    padding: 2rem;
 }
 .group__title{
     font-size: large;

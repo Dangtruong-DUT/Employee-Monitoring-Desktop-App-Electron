@@ -10,137 +10,42 @@ const init = {
       isAccessServer: false,
       isLoggedIn: false, 
    },
-   EventLogs: [
-      {
-         title:'kết nối thất bại',
-         content:'kiểm tra lại mạng',
-         time:'12:00 AM',
-         author:'Admin',
-
-      },
-      {
-         title:'kết nối thất bại',
-         content:'kiểm tra lại mạng',
-         time:'12:00 AM',
-         author:'Admin',
-
-      },
-      {
-         title:'kết nối thất bại',
-         content:'kiểm tra lại mạng',
-         time:'12:00 AM',
-         author:'Admin',
-
-      },
-   ],
+   EventLogs: [],
    homePage: {
       indexPage: 0
    },
-   GeneralNotice:[
-      {
-         title:'thông báo hủy họp',
-         content:'Họp đã bị hủy bởi Admin',
-         time:'12:00 AM',
-         author:'Admin',
-         isUnRead: false
-      },
-      {
-         title:'thông báo dịnh hướng nghề nghiệp',
-         content:'Thông báo đã dịnh hướng nghề nghiệp cho bạn',
-         time:'12:30 AM',
-         author:'Admin',
-         isUnRead: true,
-      },
-      
-      {
-         title:'thông báo dịnh hướng nghề nghiệp',
-         content:'Thông báo đã dịnh hướng nghề nghiệp cho bạn',
-         time:'12:30 AM',
-         author:'Admin',
-         isUnRead: true,
-      }, {
-         title:'thông báo hủy họp',
-         content:'Họp đã bị hủy bởi Admin',
-         time:'12:00 AM',
-         author:'Admin',
-         isUnRead: false
-      },
-   ],
-   NotiSession:[
-      {
-         title:'thông báo hủy họp',
-         content:'Họp đã bị hủy bởi Admin',
-         time:'12:00 AM',
-         author:'Admin',
-      },
-      {
-         title:'thông báo dịnh hướng nghề nghiệp',
-         content:'Thông báo đã dịnh hướng nghề nghiệp cho bạn',
-         time:'12:30 AM',
-         author:'Admin',
-      },
-      
-      {
-         title:'thông báo dịnh hướng nghề nghiệp',
-         content:'Thông báo đã dịnh hướng nghề nghiệp cho bạn',
-         time:'12:30 AM',
-         author:'Admin',
-      }, {
-         title:'thông báo hủy họp',
-         content:'Họp đã bị hủy bởi Admin',
-         time:'12:00 AM',
-         author:'Admin',
-      },
-   ],
-   PersonInfor: {
-      avartar: 'https://img.meta.com.vn/Data/image/2021/09/22/anh-meo-cute-de-thuong-dang-yeu-42.jpg',
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      jobTitle: 'Software Engineer',
-      department: 'IT Department',
-      id: '123-456-7890',
-      companyName: 'CTY TNHH',
-      password: '123456789'
-   },
-   Departments: [
-      {
-         name: 'IT Department',
-         isJoined: true,
-      },
-      {
-         name: 'HR Department',
-         isJoined: false,
-      },
-      {
-         name: 'Finance Department',
-         isJoined: true,
-      }
-   ],
+   GeneralNotice:storage.getGeneralNotice(),
+   NotiSession: storage.getNotiSession(),
+   Account: storage.getAccount(),
+   PersonInfor:{},
+   Departments:[],
 }
 
 
 const  actions = {
-    Loggin({PersonInfor,States,},email,password,HomePage) {
-      PersonInfor.email =email;
-      PersonInfor.password = password;
-        storage.setUser(PersonInfor)
-        States.isLoggedIn = true;
-        controller(HomePage);
+    Loggin(state,email,password,personInfor,departments,HomePage) {
+         state.Account.email =email;
+         state.Account.password = password;
+         storage.setAccount(state.Account);
+         state.States.isLoggedIn = true;
+         state.Departments = departments;
+         state.PersonInfor = personInfor;
+         controller(HomePage);
     },
     LOGOUT({States},Login,FORMLOGINOBJECT) {
-       States.isLoggedIn = false;
-       controller(Login,Validator,FORMLOGINOBJECT);
+         States.isLoggedIn = false;
+         controller(Login,Validator,FORMLOGINOBJECT);
     },
     GOTOINDEXPAGE({homePage},indexPage) {
-       homePage.indexPage = indexPage;
+         homePage.indexPage = indexPage;
     },
     READALLNOTIGENARAL({GeneralNotice}) {
-      GeneralNotice.forEach(element => {
-         element.isUnRead=false;
-      });
+         GeneralNotice.forEach(element => {
+            element.isUnRead=false;
+         });
     },
     READNOTIGENERAL({GeneralNotice},indexNoti) {
-      GeneralNotice[indexNoti].isUnRead=false;
+         GeneralNotice[indexNoti].isUnRead=false;
     },
     EXITDEPART({Departments},index) {
       Departments.splice(index,1);
@@ -148,14 +53,47 @@ const  actions = {
     CHANGENAME({PersonInfor},name) {
       PersonInfor.name = name;
     },
-    CHANGEAVATAR({PersonInfor},avartar) {
-      PersonInfor.avartar = avartar;
+    CHANGEAVATAR({PersonInfor},avatar) {
+      PersonInfor.avatar = avatar;
     },
     CHANGEPASSWORD({PersonInfor},password) {
       PersonInfor.password = password;
     },
     JOINDEPART() {
       console.log("joining")
+    },
+    ISONLINE({States,EventLogs}) {
+      States.isOnline= true;
+      let now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let seconds = now.getSeconds();
+      EventLogs.push(
+         {
+            title:'INTERNET',
+            content:'Kết nối thành công!',
+            time: `${hours}: ${minutes}:  ${seconds}`,
+            author:'Hệ thống',
+   
+         }
+      )
+    },
+    ISOFFLINE({States,EventLogs}) {
+      States.isOnline= false;
+      States.isAccessServer= false;
+      let now = new Date();
+      let hours = now.getHours();
+      let minutes = now.getMinutes();
+      let seconds = now.getSeconds();
+      EventLogs.push(
+         {
+            title:'INTERNET',
+            content:'Kết nối thất bại!',
+            time: `${hours} : ${minutes} : ${seconds}`,
+            author:'Hệ thống',
+   
+         }
+      )
     }
  }
 

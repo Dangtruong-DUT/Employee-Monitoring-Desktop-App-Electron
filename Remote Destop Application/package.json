@@ -6,6 +6,7 @@
   "author": {
     "name": "3anhtuong"
   },
+  "productName": "Remote Desktop Application",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
@@ -26,5 +27,17 @@
     "@electron/fuses": "^1.8.0",
     "@iconify-json/material-symbols-light": "^1.2.5",
     "electron": "^33.0.2"
+  },
+  "build": {
+    "appId": "com.remoteDestop.elec",
+    "mac": {
+      "icon": "./assets/imgs/logo.icns"
+    },
+    "win": {
+      "icon": "./assets/imgs/logo.ico"
+    },
+    "linux": {
+      "icon": "./assets/imgs/logo.png"
+    }
   }
 }
