@@ -65,7 +65,7 @@ const app = (function () {
             window.addEventListener('online', () => {
                 new Notification("Thông báo trạng thái kết nối mạng", { body: `Kết nối tới Internet thành công!` });
                 dispatch("ISONLINE");
-                
+
             });
 
             window.addEventListener('offline', () => {
