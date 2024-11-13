@@ -14,6 +14,7 @@ function Login () {
                 </div>
                 
         </section>
+        
     `
 }
 export {FORMLOGINOBJECT} from './form.js'

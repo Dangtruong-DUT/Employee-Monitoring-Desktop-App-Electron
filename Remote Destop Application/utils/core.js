@@ -30,7 +30,11 @@ export function createStore(reducer) {
         },
         dispatch(action,...args) {
             state = reducer(state, action, args);
-            render();
+            if (state?.render?.isRender==false) {
+                state.render.isRender = true;
+            } else {
+                render();
+            }
         }
     }
 

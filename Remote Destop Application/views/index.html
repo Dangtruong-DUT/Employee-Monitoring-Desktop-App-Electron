@@ -7,10 +7,11 @@
     <meta http-equiv="Content-Security-Policy" content="
     default-src 'self'; 
     img-src 'self' https://cdn.icon-icons.com https://img.meta.com.vn data:; 
-    script-src 'self'; 
+    script-src 'self' https://cdn.jsdelivr.net; 
     style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; 
     font-src 'self' https://fonts.gstatic.com; 
     connect-src 'self' http://localhost:3000 ws://localhost:8080;">
+
 
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -21,13 +22,20 @@
     <link rel="stylesheet" href="../assets/styles/homepage.css">
     <link rel="stylesheet" href="../assets/styles/adminSetting.css">
     <link rel="stylesheet" href="../assets/styles/settings.css">
+    <link rel="stylesheet" href="../assets/styles/waitingConnection.css">
     <title>remote desktop</title>
 </head>
 
 <body>
     <div id="root"></div>
-    <!--/. End modal đổi tên 1-->
+    <div class="alert-container" id="alertContainer"></div>
+    <div id="loadingPage" class="modal hidden">
+        <div class="modal__overlay"></div>
+        <div class="modal__body modal__body--loadingPage">
+            <div class="loader"></div>
+        </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script type="module" src="../js/App.js"></script>
-   
 </body>
 </html>

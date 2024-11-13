@@ -1,8 +1,7 @@
 .waitingConnection{
-    box-shadow: -6px -2px 10px #c2cfe7;
+    box-shadow: -6px -2px 10px #e6e6e6;
     display: flex;
-    width: 80vh;
-    height: 70vh;
+    max-width: 500px;
     flex-direction: column;
     margin: auto;
     align-items: center;
@@ -16,9 +15,12 @@
     width: 400px;
     height:auto
 }
-.waitingConnection__title{
-    font-size: large;
-    font-weight: 500;
+
+.waitingConnection__title {
+        font-size: medium;
+        font-weight: 400;
+        color: #68686a;
+        padding: 2rem;
 }
 .icon--loading {
 }

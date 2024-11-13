@@ -67,7 +67,7 @@ export default function Validator (formSelector) {
                 }
             }
             // lắng nghe sự kiênj
-            input.onblur = handleValidate;
+           // input.onblur = handleValidate;
             input.oninput = handleClearError;
         }
         function handleValidate (event) {

@@ -6,11 +6,7 @@ function taskbar({homePage:{indexPage}}) {
             <!--taskbar-->
             <section class="homepage__taskbar">
                 <ul class="taskbar-list">
-                    <li class="taskbar__item ${indexPage==0&&'taskbar__item--active'}" data-indexpage="0"><svg class="icon" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24">
-                            <path
-                                d="m12 4.27l9.577 7.172l-.623.793L19 10.769V20H5v-9.23l-1.954 1.465l-.623-.793zm-3.496 8.198q0 1.003 1.079 2.138T12 16.962q1.377-1.221 2.456-2.355t1.079-2.134q0-.83-.57-1.383q-.57-.551-1.368-.551q-.493 0-.896.204q-.403.205-.701.515q-.26-.31-.678-.515q-.418-.204-.875-.204q-.8 0-1.372.548q-.571.549-.571 1.381M18 19v-9l-6-4.5L6 10v9zm0 0H6z" />
-                        </svg>
+                    <li class="taskbar__item ${indexPage==0&&'taskbar__item--active'}" data-indexpage="0"><svg xmlns="http://www.w3.org/2000/svg" class="icon"   viewBox="0 0 16 16"><path  d="M7.313 1.262a1 1 0 0 1 1.374 0l4.844 4.579c.3.283.469.678.469 1.09v5.57a1.5 1.5 0 0 1-1.5 1.5h-2A1.5 1.5 0 0 1 9 12.5V10a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v2.5A1.5 1.5 0 0 1 5.5 14h-2A1.5 1.5 0 0 1 2 12.5V6.93c0-.412.17-.807.47-1.09zM8 1.988l-4.844 4.58A.5.5 0 0 0 3 6.93v5.57a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V10a1.5 1.5 0 0 1 1.5-1.5h1A1.5 1.5 0 0 1 10 10v2.5a.5.5 0 0 0 .5.5h2a.5.5 0 0 0 .5-.5V6.93a.5.5 0 0 0-.156-.363z"/></svg>
                         <div class="taskbar_item__title">Home</div>
                     </li>
                     <li class="taskbar__item  ${indexPage==1&&'taskbar__item--active'}" data-indexpage="1"><svg class="icon " xmlns="http://www.w3.org/2000/svg" 

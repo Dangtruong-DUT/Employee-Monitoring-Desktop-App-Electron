@@ -29,23 +29,34 @@ function formLogin({ Account: { email, password }}) {
 }
 export const FORMLOGINOBJECT = {
     form : '#formlogin',
-    onSubmit: async function (data) {
-        try {
-            const response = await window.authAPI.login(data.email, data.password);
-            if (response.state=="true") {
-                if (response.PersonInfor && response.Departments) {
-                    dispatch("Loggin", data.email, data.password,response.PersonInfor,response.Departments,HomePage);
-                    new Notification("Successfully logged in", { body: `Xin Chào ${data.email}` });
+    onSubmit:  function ({ email, password }) {
+        
+        let loadingPage = Imports.$('#loadingPage');
+        if (loadingPage && loadingPage.classList.contains('hidden')) loadingPage.classList.remove('hidden');
+        
+        window.API.login(email, password)
+        .then (response => {
+            if (response?.success) {
+                if (response?.data?.state == "true") {
+                    if (response?.data?.PersonInfor && response?.data?.Departments) {
+                        dispatch("Loggin", email, password, response.data.PersonInfor, response.data.Departments, HomePage);
+                        Imports.showAlert(`Xin Chào ${response.data?.PersonInfor?.name}`);
+                    } else {
+                        throw  new Error("Lỗi trong quá trình đăng nhập!");
+                    }
                 } else {
-                alert("Tải trang Thất bại!");
-
+                   Imports.showAlert("Email hoặc Password Chưa Chính Xác!","Error");
                 }
             } else {
-                alert("Failed to login!, vui lòng kiểm tra password và Email");
-            } 
-        } catch (error) {
-            console.error(error);
-        }
+                throw  new Error("Lỗi kết nối với Server!");
+            }
+        })
+        .catch (error => {
+            Imports.showAlert(error.message,"Error");
+        })
+        .finally(()=> {
+            if (loadingPage) loadingPage.classList.add('hidden');
+        })
     }
 
 }

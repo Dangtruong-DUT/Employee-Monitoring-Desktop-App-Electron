@@ -1,40 +1,41 @@
 
 import * as Imports from './import.js';
-import { FORMCHANGAVATAROBJECT, FORMCHANGEPASSWORD, FORMCHANGENAMEOBJECT } from '../renderers/home/modals/modalSettings.js';
-const { $, $s, attach, Login, taskbarEvents, HeaderEvents,
-    connectPageEvents, settingPageEvents, EventModalExitSession, FORMLOGINOBJECT, FORMJOINDERPART, validator } = Imports;
-
-
+import waitingConnection from '../renderers/waitingConnection.js';
+import { FORMCHANGAVATAROBJECT, FORMCHANGEPASSWORD, FORMCHANGENAMEOBJECT }
+    from '../renderers/home/modals/modalSettings.js';
+const { $, $s, attach, Login, taskbarEvents, HeaderEvents,connectPageEvents, 
+    settingPageEvents, EventModalExitSession,FORMLOGINOBJECT, FORMJOINDERPART, validator } = Imports;
 
 const app = (function () {
     const properties = {
         currentPage: null,
+        previousPage: null,
         root: $('#root'),
         forms: [FORMCHANGAVATAROBJECT, FORMCHANGEPASSWORD, FORMCHANGENAMEOBJECT, FORMLOGINOBJECT, FORMJOINDERPART]
-    }
-    // tim cha ngoai cung chua element
+    };
+    
     function getParent(element, selector) {
         while (element.parentElement) {
             if (element.parentElement.matches(selector)) {
-                return element.parentElement
+                return element.parentElement;
             }
-            element = element.parentElement
+            element = element.parentElement;
         }
     }
+
     function handleForm(e) {
-        // Kiểm tra nếu sự kiện xảy ra trên các input có class '.form-control'
         const inputElement = e.target.closest('.form-control');
         if (inputElement) {
             const label = inputElement.nextElementSibling;
-            if (e.type == 'focusin') {
+            if (e.type === 'focusin') {
                 label.style.display = 'block';
-            } else if (e.type == 'focusout') {
+            } else if (e.type === 'focusout') {
                 label.style.display = inputElement.value !== '' ? 'block' : 'none';
             }
         }
     }
+
     function handleModal(e) {
-        // su kien ấn btn exit modal
         if (e.target.closest('.modal__btnExit')) {
             let btnExitModal = e.target.closest('.modal__btnExit');
             let modal_parent = getParent(btnExitModal, ".modal");
@@ -42,7 +43,6 @@ const app = (function () {
                 modal_parent.classList.add('hidden');
             }
         }
-        // su kien click ngoai pham vi modal
         if (e.target.closest('.modal__overlay')) {
             let overlayElement = e.target.closest('.modal__overlay');
             let modal_parent = getParent(overlayElement, ".modal");
@@ -51,7 +51,7 @@ const app = (function () {
             }
         }
     }
-    //trạng thái form ban đầu
+
     function initForm() {
         $s('.form-control').forEach(input => {
             if (input.value !== '') {
@@ -61,25 +61,106 @@ const app = (function () {
     }
 
     return {
+        getTime() {
+            const now = new Date();
+            const hours = now.getHours();
+            const minutes = now.getMinutes();
+            const seconds = now.getSeconds();
+            return `${hours} : ${minutes} : ${seconds}`;
+        },
         listenerNetwork() {
             window.addEventListener('online', () => {
-                new Notification("Thông báo trạng thái kết nối mạng", { body: `Kết nối tới Internet thành công!` });
-                dispatch("ISONLINE");
-
+                this.handleOnline();
             });
-
             window.addEventListener('offline', () => {
-                new Notification("Thông báo trạng thái kết nối mạng", { body: `Mất kết nối tới Internet!` });
-                dispatch("ISOFFLINE");
-
+                this.handleOffline();
             });
         },
         checkConnectWithInternet() {
             if (navigator.onLine) {
                 dispatch("ISONLINE");
             } else {
-                new Notification("Thông báo trạng thái kết nối mạng", { body: `Mất kết nối tới Internet!` });
-                dispatch("ISOFFLINE");
+                this.handleOffline();
+            }
+        },
+        handleOnline() {
+            Imports.showAlert(`Đã kết nối tới Internet!`,"Info");
+            if (properties.currentPage == waitingConnection
+                &&properties.previousPage!=waitingConnection) {
+                this.controller(properties.previousPage);
+            } else {
+                this.controller(Login);
+            }
+            const loadingPage = $('#loadingPage');
+            if (loadingPage) loadingPage.classList.add('hidden');
+            dispatch("ISONLINE");
+        },
+        handleOffline() {
+            Imports.showAlert(`Mất kết nối tới Internet!`,"Warning");
+            dispatch("ISOFFLINE");
+            const loadingPage = $('#loadingPage');
+            if (loadingPage && loadingPage.classList.contains('hidden')) loadingPage.classList.remove('hidden');
+            setTimeout(() => {
+                if (!navigator.onLine) {
+                    this.controller(waitingConnection);
+                }
+                if (loadingPage) loadingPage.classList.add('hidden');
+            }, 10000);
+        },
+        listenerSocketIO() {
+            window.API.receiveMessage("socket-status", this.handleSocketStatus.bind(this));
+            window.API.receiveMessage("socket-notifySession", this.handleSocketNotifySession.bind(this));
+            window.API.receiveMessage("socket-notify", this.handleSocketNotify.bind(this));
+        },
+        handleSocketNotifySession(data) {
+            if (data && data?.title 
+                && data?.content 
+                &&data?.author) {
+                    Imports.showAlert('Thông Báo:'+data.title, "Info");
+                    dispatch("NEWNOTIFYSESSION", data);
+            }
+        },
+        handleSocketNotify(data) {
+            if (data && data?.title 
+                && data?.content 
+                &&data?.author) {
+                    Imports.showAlert('Thông Báo:'+data.title, "Info");
+                    dispatch("NEWNOTIFY", data);
+            }
+        },
+        handleSocketStatus(data) {
+            let isconnected = true;
+            if (data.status == "connected" ) {
+                const eventlog = {
+                    title: "SOCKET STATUS",
+                    content: 'Kết nối thành công với server!',
+                    time: this.getTime(),
+                    author: "Hệ thống"
+                };
+                Imports.showAlert("Đã kết nối thành công với server!","Info");
+                dispatch("CHECKACCESSSERVER", eventlog,isconnected);
+            } else if (data.status == "error") {
+                const eventlog = {
+                    title: "SOCKET STATUS",
+                    content: `Error: ${data.error}`,
+                    time: this.getTime(),
+                    author: "Hệ thống"
+                };
+                Imports.showAlert("Mất kết nối với server!","Error");
+                dispatch("CHECKACCESSSERVER", eventlog,false);
+            } else if (data.status == "disconnected" ) {
+                isconnected = false;
+                const eventlog = {
+                    title: "SOCKET STATUS",
+                    content: 'Mất kết nối với server!',
+                    time: this.getTime(),
+                    author: "Hệ thống"
+                };
+                Imports.showAlert("Mất kết nối với server!","Warning");
+                dispatch("CHECKACCESSSERVER", eventlog,isconnected);
+            }
+            if (data?.ServerInfor) {
+                dispatch("SAVERSERVER", data?.ServerInfor);
             }
         },
         handleEvent(event) {
@@ -91,40 +172,62 @@ const app = (function () {
                 settingPageEvents(event);
                 EventModalExitSession(event, getParent);
             }
-            if (event.type == "focusin" || event.type == "focusout") {
+            if (event.type === "focusin" || event.type === "focusout") {
                 handleForm(event);
             }
-
             properties.forms.forEach((formObject) => {
-                if (formObject&&event.target.closest(formObject.form)) {
+                if (formObject && event.target.closest(formObject.form)) {
                     new validator(formObject.form).onSubmit = formObject.onSubmit;
                 }
-            })
-
+            });
+            var ctx = document.getElementById('myChart')?.getContext('2d');
+            if (ctx) {
+                // Kiểm tra nếu đã có một chart cũ
+                    if (window.myChart instanceof Chart) {
+                        window.myChart.destroy(); // Hủy bỏ chart cũ
+                    }
+                var myChart = new Chart(ctx, {
+                    type: 'line', // Loại biểu đồ: line, bar, pie, etc.
+                    data: {
+                        labels: ['January', 'February', 'March', 'April', 'May', 'June'], // Nhãn trên trục x
+                        datasets: [{
+                            label: 'Doanh thu', // Tên của dataset
+                            data: [12, 19, 3, 5, 2, 3], // Dữ liệu biểu đồ
+                            borderColor: 'rgba(75, 192, 192, 1)', // Màu viền
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            }
         },
         loadPage() {
             attach(properties.currentPage, properties.root);
             requestAnimationFrame(() => {
                 initForm();
             });
-
         },
         controller(newPage) {
+            properties.previousPage = properties.currentPage;
             properties.currentPage = newPage;
             this.loadPage();
         },
         start() {
-            this.checkConnectWithInternet();
             this.controller(Login);
-            
+            this.checkConnectWithInternet();
             this.listenerNetwork();
+            this.listenerSocketIO(); 
             root.onclick = this.handleEvent.bind(this);
             root.addEventListener('focusin', this.handleEvent.bind(this), true);
             root.addEventListener('focusout', this.handleEvent.bind(this), true);
-
-           
         }
-    }
+    };
 
 })();
 
