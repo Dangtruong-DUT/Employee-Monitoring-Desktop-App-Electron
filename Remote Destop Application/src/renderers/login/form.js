@@ -37,7 +37,7 @@ export const FORMLOGINOBJECT = {
         window.API.login(email, password)
         .then (response => {
             if (response?.success) {
-                if (response?.data?.state == "true") {
+                if (response?.data?.state) {
                     if (response?.data?.PersonInfor && response?.data?.Departments) {
                         dispatch("Loggin", email, password, response.data.PersonInfor, response.data.Departments, HomePage);
                         Imports.showAlert(`Xin Chào ${response.data?.PersonInfor?.name}`);
@@ -48,7 +48,7 @@ export const FORMLOGINOBJECT = {
                    Imports.showAlert("Email hoặc Password Chưa Chính Xác!","Error");
                 }
             } else {
-                throw  new Error("Lỗi kết nối với Server!");
+                throw  new Error(response.message);
             }
         })
         .catch (error => {

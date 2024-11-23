@@ -85,8 +85,8 @@ function pageAdminSettings({PersonInfor,Departments,Server,States,EventLogs,filt
 
                              <section class="group-setting ">
                                 <div class="group__title">Biểu Đồ Ghi Nhận Từ Admin</div>
-                                <div class="group__content">
-                                     <canvas id="myChart" width="400" height="400"></canvas>
+                                <div class="group__content" >
+                                     <canvas id="revenueChart" class="chart"></canvas>
                                 </div>
 
                             </section>

@@ -1,6 +1,6 @@
-import storage from './utils/storage.js';
-import controller from './js/App.js';
-import Validator from './utils/validator.js';
+import storage from './storage.js';
+import controller from '../js/index.js';
+import Validator from '../utils/validator.js';
 
 
 const daysBetween = (date1, date2) => {
@@ -78,7 +78,7 @@ const actions = {
       GeneralNotice[indexNoti].isUnRead = false;
    },
    EXITDEPART({ Departments }, idToDelete) {
-      const index = Departments.findIndex(department => department.id === idToDelete);
+      const index = Departments.findIndex(department => department.id == idToDelete);
       if (index !== -1) {
          Departments.splice(index, 1);  // Xóa phòng ban tại chỉ số tìm được
       }

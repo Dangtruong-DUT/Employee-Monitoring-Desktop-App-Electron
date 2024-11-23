@@ -2,7 +2,7 @@
   "name": "remote-desktop-application",
   "version": "1.0.0",
   "description": "A desktop application that allows remote desktop access",
-  "main": "main.js",
+  "main": "./src/main.js",
   "author": {
     "name": "3anhtuong"
   },

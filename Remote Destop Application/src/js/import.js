@@ -1,5 +1,5 @@
-export {$, $s } from '../utils/core.js'
-export {attach,connect} from '../store.js'
+export {$, $s } from '../redux/core.js'
+export {attach,connect} from '../redux/store.js'
 export { taskbarEvents } from '../renderers/home/taskbar.js';
 export { HeaderEvents } from '../renderers/home/header.js';
 export { connectPageEvents } from '../renderers/home/components/connectPage.js';
@@ -17,6 +17,5 @@ import Login from '../renderers/login/loginPage.js';
 export { Login };
 import HomePage from '../renderers/home/HomePage.js';
 export { HomePage };
-import  html  from '../utils/core.js'
+import  html  from '../redux/core.js'
 export { html };
-import { connect } from '../store.js';

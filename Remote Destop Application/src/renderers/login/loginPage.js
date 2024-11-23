@@ -1,4 +1,4 @@
-import html from '../../utils/core.js'
+import{ html}from '../../js/import.js';
 import intro from './intro.js'
 import form from './form.js'
 

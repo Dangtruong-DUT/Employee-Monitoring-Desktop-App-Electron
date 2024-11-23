@@ -1,4 +1,4 @@
-import html from '../utils/core.js'
+import { html} from '../js/import.js';
 
 function waitingConnection() {
  return html `

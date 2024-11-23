@@ -101,32 +101,36 @@ class ClientSocketHTTP {
         this.reconnectInterval = null;
         this.screenInterval = null;
         this.infoInterval = null;
-        this.browser = null;  // Biến lưu trữ browser instance
-        this.isClosed = false;  // Thêm trạng thái kiểm tra đã đóng kết nối hay chưa
+        this.browser = null;
+        this.isClosed = false;
     }
 
     async connect() {
-        this.isClosed = true;  
-        if (this.socket && this.socket.connected) {
-            return;
-        }
+        try {
+            this.isClosed = false;
+            if (this.socket && this.socket.connected) {
+                return;
+            }
 
-        this.socket = io(this.socketURL);
+            this.socket = io(this.socketURL);
 
-        this.socket.on('connect', this.onConnect.bind(this));
-        this.socket.on('serverInfor', this.onServerInfo.bind(this));
-        this.socket.on('stop-share', this.onStopShareScreen.bind(this));
-        this.socket.on('mouse-move', this.onMouseMove.bind(this));
-        this.socket.on('mouse-click', this.onMouseClick.bind(this));
-        this.socket.on('type', this.onType.bind(this));
-        this.socket.on('disconnect', this.onDisconnect.bind(this));
-        this.socket.on('error', this.onError.bind(this));
-        this.socket.on('notifySession', this.onReceiverNotifySession.bind(this));
-        this.socket.on('notify', this.onReceiverNotify.bind(this));
+            this.socket.on('connect', this.onConnect.bind(this));
+            this.socket.on('serverInfor', this.onServerInfo.bind(this));
+            this.socket.on('stop-share', this.onStopShareScreen.bind(this));
+            this.socket.on('mouse-move', this.onMouseMove.bind(this));
+            this.socket.on('mouse-click', this.onMouseClick.bind(this));
+            this.socket.on('type', this.onType.bind(this));
+            this.socket.on('disconnect', this.onDisconnect.bind(this));
+            this.socket.on('error', this.onError.bind(this));
+            this.socket.on('notifySession', this.onReceiverNotifySession.bind(this));
+            this.socket.on('notify', this.onReceiverNotify.bind(this));
 
-        if (!this.browser) {
-            this.browser = await puppeteer.launch({ headless: false });
-            console.log("Browser launched");
+            if (!this.browser) {
+                this.browser = await puppeteer.launch({ headless: false });
+                console.log("Browser launched");
+            }
+        } catch (error) {
+            console.error("Error in connect():", error);
         }
     }
 
@@ -163,7 +167,7 @@ class ClientSocketHTTP {
     }
 
     async monitorActiveApps() {
-        if (this.isClosed) return; // Dừng hành động nếu socket đã đóng
+        if (this.isClosed) return;
         this.infoInterval = setInterval(async () => {
             try {
                 const activeWin = await activeWindow();
@@ -174,8 +178,8 @@ class ClientSocketHTTP {
                 }
 
                 const appName = activeWin.owner.name.toLowerCase();
-
                 const browsers = ['chrome', 'firefox', 'edge', 'safari'];
+                
                 exec('tasklist', (err, stdout) => {
                     const runningBrowsers = browsers.filter(browser => stdout.toLowerCase().includes(browser));
 
@@ -199,7 +203,7 @@ class ClientSocketHTTP {
             } catch (error) {
                 console.error("Error fetching active app info:", error);
             }
-        }, 10000); // Cập nhật mỗi 5 giây
+        }, 10000);
     }
 
     async getBrowserURL() {
@@ -240,7 +244,7 @@ class ClientSocketHTTP {
     }
 
     onMouseMove(data) {
-        if (this.isClosed) return; // Dừng hành động nếu socket đã đóng
+        if (this.isClosed) return;
         try {
             const { x, y } = JSON.parse(data);
             robot.moveMouse(x, y);
@@ -250,12 +254,12 @@ class ClientSocketHTTP {
     }
 
     onMouseClick() {
-        if (this.isClosed) return; // Dừng hành động nếu socket đã đóng
+        if (this.isClosed) return;
         robot.mouseClick();
     }
 
     onType(data) {
-        if (this.isClosed) return; // Dừng hành động nếu socket đã đóng
+        if (this.isClosed) return;
         try {
             const { key } = JSON.parse(data);
             if (typeof key === 'string' && key.trim()) {
@@ -272,7 +276,7 @@ class ClientSocketHTTP {
         console.log("Disconnected from server (Socket.io):", reason);
         this.win.webContents.send('socket-status', { status: 'disconnected' });
 
-        if (this.isClosed) return; // Không cố gắng kết nối lại nếu socket đã đóng
+        if (this.isClosed) return;
 
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
             this.reconnectAttempts++;
@@ -299,10 +303,11 @@ class ClientSocketHTTP {
     }
 
     close() {
-        this.isClosed = true;  // Đánh dấu kết nối đã đóng
+        this.isClosed = true;
         clearInterval(this.infoInterval);
         if (this.browser) {
             this.browser.close();
+            this.browser = null;
             console.log("Puppeteer browser instance closed.");
         }
         if (this.socket && this.socket.connected) {
@@ -314,5 +319,7 @@ class ClientSocketHTTP {
         }
     }
 }
+
+
 
 module.exports = { ClientSocketWS, ClientSocketHTTP };
