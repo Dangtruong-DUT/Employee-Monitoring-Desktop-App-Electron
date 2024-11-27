@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const ipServer = 'http://192.168.123.134:8088';
+const ipServer = 'http://10.10.27.11:8088';
 
 async function fetchAPI(endpoint, options) {
     const url = `${ipServer}${endpoint}`;

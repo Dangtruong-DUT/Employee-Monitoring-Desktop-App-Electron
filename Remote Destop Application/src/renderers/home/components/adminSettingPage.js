@@ -64,7 +64,7 @@ function pageAdminSettings({PersonInfor,Departments,Server,States,EventLogs,filt
                                         <div class="group__item-content">${(States.isAccessServer&&'Kết nối thành công')||'Chưa kết nối với server'}</div>
                                     </div>
                                     <div class="group__item group__item--img">
-                                        <img class="group-item__img"  src="../assets/imgs/connectServer.png" alt="img">
+                                        <img class="group-item__img"  src="../src/assets/imgs/connectServer.png" alt="img">
                                     </div>
                                 </div>
 

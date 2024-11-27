@@ -20,6 +20,7 @@ const createBrowserWindow = () => {
         height: 750,
         minHeight: 750,
         minWidth: 1200,
+        frame: false, // Ẩn thanh tiêu đề mặc định
         webPreferences: {
             preload: path.join(__dirname,'preloads', 'Preload.js'),
             nodeIntegration: false,
@@ -93,18 +94,17 @@ ipcMain.handle('login', async (event, user) => {
     try {
         const loginData = await login(user);
         const userInfo = await fetchUserInfo(loginData.data.token, loginData.data.id);
-        const { departmentDTOs: Departments, ...PersonInfor } = userInfo;
-
-        socket.connect();
+        const { departmentDTOs: Departments, ...PersonInfor } = userInfo.data;
+        PersonInfor.token = loginData.data.token;
 
         return { success: true, data: { Departments, PersonInfor, state: loginData.state, message: loginData.message } };
     } catch (error) {
         return { success: false, message: error.message, data: {} };
     }
 });
-
 ipcMain.handle('changeInfor-user', async (event, { token, id, user }) => {
     try {
+        console.log('changeInfor-user, token: ',token);
         await updateUserInfo(token, id, user);
         return { success: true };
     } catch (error) {

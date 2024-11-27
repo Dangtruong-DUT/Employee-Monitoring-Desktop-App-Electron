@@ -10,7 +10,7 @@ function settingPage({PersonInfor}) {
 
                                 <div class="setting__item-left">
                                     <div class="setting__item-container">
-                                        <img class= 'setting__img' src="../assets/imgs/settingAccount.png"  alt="settingAccount">
+                                        <img class= 'setting__img' src="../src/assets/imgs/settingAccount.png"  alt="settingAccount">
                                     </div>
                                     <div class="setting__item-container">
                                         <div class="setting-item__title">Account</div>

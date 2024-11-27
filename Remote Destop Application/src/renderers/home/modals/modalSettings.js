@@ -203,7 +203,7 @@ async function handleChangeInforUser(state) {
         token,
         user: otherFields,
     };
-
+    console.log(dataFetch);
     try {
         const response = await window.API.changeInfor(dataFetch);
         if (response?.success) {
