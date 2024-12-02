@@ -21,3 +21,9 @@
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Executable files
+*.exe
+
+# Explicitly ignore node_modules
+Remote Destop Application/node_modules/

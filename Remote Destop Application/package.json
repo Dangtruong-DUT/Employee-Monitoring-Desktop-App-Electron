@@ -39,7 +39,10 @@
     "@electron/fuses": "^1.8.0",
     "@electron/rebuild": "^3.7.0",
     "@iconify-json/material-symbols-light": "^1.2.5",
-    "electron": "^22.3.0"
+    "electron": "^22.3.0",
+    "webpack": "^5.96.1",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.1.0"
   },
   "build": {
     "appId": "com.remoteDestop.elec",

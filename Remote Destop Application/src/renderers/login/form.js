@@ -37,6 +37,7 @@ export const FORMLOGINOBJECT = {
         window.API.login(email, password)
         .then (response => {
                 console.log(response)
+                window.token = response?.data?.PersonInfor?.token;
             if (response?.success) {
                 if (response?.data?.state) {
                     if (response?.data?.PersonInfor && response?.data?.Departments) {

@@ -4,6 +4,8 @@ import { FORMCHANGAVATAROBJECT, FORMCHANGEPASSWORD, FORMCHANGENAMEOBJECT }
     from '../renderers/home/modals/modalSettings.js';
 const { $, $s, attach, Login, taskbarEvents, HeaderEvents, connectPageEvents, 
     settingPageEvents, EventModalExitSession, FORMLOGINOBJECT, FORMJOINDERPART, validator } = Imports;
+import { ClientSocketWS } from '../utils/clientSocketUtil.js';
+const socket =new ClientSocketWS();
 
 const app = (function () {
     const properties = {
@@ -118,6 +120,9 @@ const app = (function () {
             window.API.receiveMessage("socket-status", handleSocketStatus.bind(this));
             window.API.receiveMessage("socket-notifySession", handleSocketNotify.bind(this));
             window.API.receiveMessage("socket-notify",handleSocketNotify.bind(this));
+            window.API.receiveMessage("login-success",socket.connect.bind(socket));
+            
+            
         },
         handleEvent(event) {
             const handlers = {
@@ -164,6 +169,6 @@ const app = (function () {
         }
     };
 })();
-
+console.log(navigator);
 app.start();
 export default app.controller.bind(app);
