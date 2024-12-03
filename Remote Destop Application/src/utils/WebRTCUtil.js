@@ -1,9 +1,8 @@
 import { Message } from "./clientSocketUtil.js";
-import RobotHandler from "./robotUtil.js";
 
 class WebRTCUtil {
-    constructor(socket, robot) {
-        this.socket = socket;
+    constructor(socketHandler, robot) {
+        this.socketHandler = socketHandler;
         this.peerConnection = null;
         this.localStream = null;
         this.configuration = {
@@ -28,15 +27,7 @@ class WebRTCUtil {
 
     createPeerConnection() {
         this.peerConnection = new RTCPeerConnection(this.configuration);
-
-
-        this.peerConnection.onicecandidate = (event) => {
-            if (event.candidate) {
-                const message = new Message("ice-candidate",{candidate: event.candidate}); 
-                this.socket.send(message.toJSON());
-            }
-        };
-
+        this.listenEventControll();
         this.peerConnection.onconnectionstatechange = () => {
             console.log("Trang Thai ket noi:", this.peerConnection.connectionState);
         };
@@ -55,13 +46,11 @@ class WebRTCUtil {
     async startStreaming() {
         if (!this.localStream) await this.initializeStream();
 
-        //this.createPeerConnection();
-
         try {
             const offer = await this.peerConnection.createOffer();
             await this.peerConnection.setLocalDescription(offer);
             const message = new Message("offer",{offer: offer}); 
-            this.socket.send(message.toJSON());
+            this.socketHandler.socket.send(message.toJSON());
             console.log("Offer da duoc gui:", offer);
         } catch (error) {
             console.error("loi khi bat dau streaming:", error);
@@ -108,8 +97,7 @@ class WebRTCUtil {
         console.log("da kuy dang ky su kien socket.");
     }
     listenEventControll() {
-        dataChannel = this.peerConnection.createDataChannel("eventChannel");
-
+        const dataChannel = this.peerConnection.createDataChannel("eventChannel");
         dataChannel.onopen = () => console.log("DataChannel đã mở");
         dataChannel.onclose = () => console.log("DataChannel đã đóng");
       
@@ -117,54 +105,22 @@ class WebRTCUtil {
             console.log("Đã nhận được event");
             const {type, data} = JSON.parse(event.data);
             
-            const robot = new RobotHandler();
             switch (type) {
                 case "mousemove":
-                    robot.handleMouseMove(data);
-                    break;
-        
                 case "dblclick":
-                    robot.handleMouseClick(data);
-                    break;
-        
                 case "mouse-left-click":
-                    robot.handleMouseClick(data);
-                    break;
-        
                 case "mouse-middle-click":
-                    robot.handleMouseClick(data);
-                    break;
-        
                 case "mouse-right-click":
-                    robot.handleMouseClick(data);
-                    break;
-        
                 case "drag-start":
-                    robot.handleDragStart();
-                    break;
-        
                 case "mouse-drag":
-                    robot.handleMouseDrag(data);
-                    break;
-        
                 case "dragend":
-                    robot.handleDragEnd();
-                    break;
-        
                 case "wheel":
-                    robot.handleWheel(data);
-                    break;
-        
                 case "keyup":
-                    robot.handleKeyUp(data);
-                    break;
-        
                 case "keydown":
-                    robot.handleKeyDown(data);
+                    window.API.sendMessage("robot-event", { type, data });
                     break;
-        
                 default:
-                    console.warn("Loại event không xác định:", mouseData.type);
+                    console.warn("Loại event không xác định:", type);
                     break;
             }
         }

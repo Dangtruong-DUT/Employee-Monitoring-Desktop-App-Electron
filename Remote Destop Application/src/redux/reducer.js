@@ -8,10 +8,15 @@ const daysBetween = (date1, date2) => {
    return Math.round(Math.abs((date1 - date2) / oneDay));
 };
 
+const parseDate = (dateString) => {
+   const [day, month, year] = dateString.split('/').map(Number);
+   return new Date(year, month - 1, day); // Tháng bắt đầu từ 0
+};
+
 const filterNotifications = (notifications, allowedDays) => {
    const currentDate = new Date();
    return notifications.filter(notification => {
-      const notificationDate = new Date(notification.date);
+      const notificationDate = parseDate(notification.date);
       return daysBetween(notificationDate, currentDate) <= allowedDays;
    });
 };

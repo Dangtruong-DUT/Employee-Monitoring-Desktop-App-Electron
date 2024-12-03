@@ -100,7 +100,7 @@ const app = (function () {
     function handleSocketNotify(data) {
         if (data?.title && data?.content && data?.author) {
             Imports.showAlert(`Thông Báo: ${data.title}`, "Info");
-            dispatch(data?.title === "socket-notifySession" ? "NEWNOTIFYSESSION" : "NEWNOTIFY", data);
+            dispatch(data?.type === "socket-notifySession" ? "NEWNOTIFYSESSION" : "NEWNOTIFY", data);
         }
     }
 

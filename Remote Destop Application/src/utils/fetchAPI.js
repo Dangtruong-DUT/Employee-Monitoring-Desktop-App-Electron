@@ -1,6 +1,6 @@
 const fetch = require('node-fetch');
 
-const ipServer = 'http://192.168.33.113:8088';
+const ipServer = process.env.IPSERVER;
 
 async function fetchAPI(endpoint, options) {
     const url = `${ipServer}${endpoint}`;
@@ -46,7 +46,7 @@ async function login(user) {
         },
         body: JSON.stringify({ username: user.email, password: user.password }),
     };
-    return fetchAPI('/rdp/api/v1/authentication/login', options);
+    return fetchAPI(`${process.env.FETCH_LOGIN}`, options);
 }
 
 async function fetchUserInfo(token, userId) {
@@ -58,7 +58,7 @@ async function fetchUserInfo(token, userId) {
             "Authorization": `Bearer ${token}`,
         },
     };
-    return fetchAPI(`/rdp/api/v1/users/user/${userId}`, options);
+    return fetchAPI(`${process.env.FETCH_USER}${userId}`, options);
 }
 
 async function updateUserInfo(token, userId, userData) {
@@ -71,7 +71,7 @@ async function updateUserInfo(token, userId, userData) {
         },
         body: JSON.stringify(userData),
     };
-    return fetchAPI(`/rdp/api/v1/users/user/${userId}`, options);
+    return fetchAPI(`${process.env.FETCH_USER}${userId}`, options);
 }
 
 async function exitDepartment(token, idnv, mapb) {
@@ -83,7 +83,7 @@ async function exitDepartment(token, idnv, mapb) {
             "Content-Type": "application/json",
         },
     };
-    return fetchAPI(`/rdp/api/v1/users/user/leave/${idnv}/${mapb}`, options);
+    return fetchAPI(`${process.env.FETCH_DEPARTMENT_LEAVE}${idnv}/${mapb}`, options);
 }
 
 async function joinDepartment(token, idnv, mapb) {
@@ -95,7 +95,7 @@ async function joinDepartment(token, idnv, mapb) {
             "Content-Type": "application/json",
         },
     };
-    return fetchAPI(`/rdp/api/v1/users/user/join/${idnv}/${mapb}`, options);
+    return fetchAPI(`${process.env.FETCH_DEPARTMENT_JOIN}${idnv}/${mapb}`, options);
 }
 
 module.exports = {

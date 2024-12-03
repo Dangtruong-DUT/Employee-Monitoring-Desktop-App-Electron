@@ -120,7 +120,7 @@ function header({States:{isAccessServer} ,PersonInfor:{avatar,name},GeneralNotic
                         <!--Avatar& name User bỏ state online thì css sẽ tương ứng offline-->
                         <li class="hompage-header__item header__item--inforUser">
                             <img class="header__avatar"
-                                src=" ${avatar || 'https://cdn.icon-icons.com/icons2/2120/PNG/512/user_account_person_avatar_icon_131248.png'}"
+                                src=" ${'https://cdn.icon-icons.com/icons2/2120/PNG/512/user_account_person_avatar_icon_131248.png'}"
                                 alt="">
                             <span class="header__title ${isAccessServer && 'state--online'} ">${name}</span>
                             <div class="combobox__dropdown header__dropdown">

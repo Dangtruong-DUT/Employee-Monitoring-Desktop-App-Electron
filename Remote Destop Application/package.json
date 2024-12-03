@@ -17,6 +17,7 @@
     "active-win": "^8.2.1",
     "chart.js": "^4.4.6",
     "chrome-remote-interface": "^0.33.2",
+    "dotenv": "^16.4.5",
     "electron": "^22.3.0",
     "electron-squirrel-startup": "^1.0.1",
     "json-server": "^1.0.0-beta.3",
@@ -40,6 +41,7 @@
     "@electron/rebuild": "^3.7.0",
     "@iconify-json/material-symbols-light": "^1.2.5",
     "electron": "^22.3.0",
+    "nodemon": "^3.1.7",
     "webpack": "^5.96.1",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^5.1.0"

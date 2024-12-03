@@ -1,4 +1,7 @@
-const { app, BrowserWindow, ipcMain, Menu, MenuItem } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu, MenuItem, clipboard } = require('electron');
+const activeWin = require('active-win');
+const robot1 = require('robotjs');
+require('dotenv').config();
 const path = require('path');
 const url = require('url');
 const {
@@ -10,7 +13,8 @@ const {
 } = require('./utils/fetchAPI.js'); 
 
 let win = null;
-let navigator =null;
+const  RobotHandler = require('./utils/robotUtil.js');
+const robot = new RobotHandler();
 
 const createBrowserWindow = () => {
     win = new BrowserWindow({
@@ -157,4 +161,73 @@ ipcMain.on('socket-notifySession', (event, data) => {
 ipcMain.on('socket-notify', (event, data) => {
     win.webContents.send('socket-notify',data);
 });
+
+
+ipcMain.on("robot-event", (event, { type, data }) => {
+    switch (type) {
+        case "mousemove":
+            robot.handleMouseMove(data);
+            break;
+
+        case "dblclick":
+        case "mouse-left-click":
+        case "mouse-middle-click":
+        case "mouse-right-click":
+            robot.handleMouseClick(data);
+            break;
+
+        case "drag-start":
+            robot.handleDragStart();
+            break;
+
+        case "mouse-drag":
+            robot.handleMouseDrag(data);
+            break;
+
+        case "drag-end":
+            robot.handleDragEnd();
+            break;
+
+        case "wheel":
+            robot.handleWheel(data);
+            break;
+
+        case "keyup":
+            robot.handleKeyUp(data);
+            break;
+
+        case "keydown":
+            robot.handleKeyDown(data);
+            break;
+
+        default:
+            console.warn("Loại event không xác định:", type);
+            break;
+    }
+});
+
+async function getActiveAppDetails() {
+    const window = await activeWin(); 
+    if (!window) {
+        return null;
+    }
+    // active app
+    const app = window.owner.name;
+    let domain="";
+
+    if (app.toLowerCase().includes('chrome') 
+        || app.toLowerCase().includes('firefox') 
+        || app.toLowerCase().includes('edge')) {
+        
+        robot1.keyTap('l', 'control');
+        robot1.keyTap('c', 'control'); 
+        domain = clipboard.readText(); 
+    }
+    win.webContents.send('active-app',{app,domain});
+}
+
+setInterval(() => {
+    getActiveAppDetails();
+}, 10000);
+
 

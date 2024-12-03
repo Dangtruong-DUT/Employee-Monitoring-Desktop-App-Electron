@@ -38,7 +38,7 @@ function settingPage({PersonInfor}) {
                                 <div class="tooltiptext ">Trường này không được chỉnh sửa</div>
                             </div>
 
-                            <div class="group-setting__row enableSettingInfor" data-indexSettingChange="0">
+                            <!--<div class="group-setting__row enableSettingInfor" data-indexSettingChange="0">
                                 <div class="setting__item-left">
                                     <div class="setting__item-container">
                                         <svg class="icon icon--fillNone icon--normal" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><g   stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" color="#e8e8e8"><path d="M7.783 17.111c-1.1.632-3.986 1.922-2.229 3.536C6.413 21.436 7.37 22 8.571 22h6.858c1.202 0 2.158-.564 3.017-1.353c1.757-1.614-1.128-2.904-2.229-3.536c-2.58-1.481-5.854-1.481-8.434 0M15.5 10a3.5 3.5 0 1 1-7 0a3.5 3.5 0 0 1 7 0"/><path d="M2.854 16A9.9 9.9 0 0 1 2 11.965C2 6.46 6.477 2 12 2s10 4.461 10 9.965A9.9 9.9 0 0 1 21.146 16"/></g></svg>
@@ -51,7 +51,7 @@ function settingPage({PersonInfor}) {
                                 <div class="setting__item-rigth">
                                     <a class="setting-item__value">Thay đổi</a>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="group-setting__row enableSettingInfor " data-indexSettingChange="1">
                                 <div class="setting__item-left">
                                     <div class="setting__item-container">

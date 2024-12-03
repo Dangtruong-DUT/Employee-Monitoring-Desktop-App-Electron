@@ -1,11 +1,8 @@
 const WebSocket = require('ws');
 const si = require('systeminformation');
-const activeWindow = require('active-win');
-const { exec } = require('child_process');
-const puppeteer = require('puppeteer');
 
 import { WebRTCUtil } from './WebRTCUtil.js';
-const socketURL = 'ws:/192.168.33.113:8088/rdp/ws';
+const socketURL = process.env.SOCKETURL;
 
 
 class ClientSocketWS {
@@ -39,11 +36,6 @@ class ClientSocketWS {
             this.socket.on('message', this.onMessage.bind(this));
             this.socket.on('close', this.onDisconnect.bind(this));
             this.socket.on('error', this.onError.bind(this));
-
-            if (!this.browser) {
-                this.browser = await puppeteer.launch({ headless: false });
-                console.log("Browser launched");
-            }
         } catch (error) {
             console.error("Error in connect():", error);
         }
@@ -57,7 +49,6 @@ class ClientSocketWS {
         this.reconnectDelay = this.initialReconnectDelay;
 
         API.sendMessage('socket-status', { status: 'connected' });
-        this.joinRoom();
         clearInterval(this.reconnectInterval);
 
         this.sendComputerInfo();
@@ -85,66 +76,15 @@ class ClientSocketWS {
         }
     }
 
-    async monitorActiveApps() {
-        if (this.isClosed) return;
-        this.infoInterval = setInterval(async () => {
-            try {
-                const activeWin = await activeWindow();
-
-                if (!activeWin || !activeWin.owner) {
-                    console.log("Không thể lấy thông tin cửa sổ đang hoạt động.");
-                    return;
-                }
-
-                const appName = activeWin.owner.name.toLowerCase();
-                const browsers = ['chrome', 'firefox', 'edge', 'safari'];
-
-                exec('tasklist', (err, stdout) => {
-                    const runningBrowsers = browsers.filter(browser => stdout.toLowerCase().includes(browser));
-
-                    if (runningBrowsers.length > 0) {
-                        this.getBrowserURL(appName).then(url => {
-                            this.sendMessage('active-apps', {
-                                activeApp: appName,
-                                browsersOpen: runningBrowsers,
-                                currentURL: url
-                            });
-                        }).catch(err => {
-                            console.error("Error getting browser URL:", err);
-                        });
-                    } else {
-                        this.sendMessage('active-apps', {
-                            activeApp: appName,
-                            browsersOpen: runningBrowsers
-                        });
-                    }
-                });
-            } catch (error) {
-                console.error("Error fetching active app info:", error);
-            }
-        }, 10000);
-    }
-
-    async getBrowserURL() {
-        return new Promise(async (resolve, reject) => {
-            try {
-                if (this.browser && this.browser.isConnected()) {
-                    const pages = await this.browser.pages();
-                    const urls = pages.map(page => page.url());
-                    resolve(urls);
-                } else {
-                    reject("Browser is not active.");
-                }
-            } catch (error) {
-                reject(`Error getting tabs: ${error}`);
-            }
+    monitorActiveApps() {
+        window.API.receiveMessage("active-app", (activeApp)=> {
+            this.sendMessage('active-app', activeApp);
         });
     }
-
     async onMessage(message) {
         try {
             const { type, data } = JSON.parse(message);
-            console.log(SON.parse(message));
+            console.log(JSON.parse(message));
             switch (type) {
                 case 'serverInfor':
                     this.onServerInfo(data);
@@ -178,7 +118,7 @@ class ClientSocketWS {
     async onStartShareScreen() {
         console.log("onStartShareScreen");
         if (!this.webrtcHandler) {
-            this.webrtcHandler = new WebRTCUtil(this.socket);
+            this.webrtcHandler = new WebRTCUtil(this);
         }
 
         try {
@@ -222,18 +162,20 @@ class ClientSocketWS {
     }
 
     onReceiverNotifySession(data) {
-        API.sendMessage('socket-notifySession', JSON.parse(data));
+        data.type = 'socket-notifySession';
+        API.sendMessage('socket-notifySession', data);
     }
 
     onReceiverNotify(data) {
-        API.sendMessage('socket-notify', JSON.parse(data));
+        data.type = 'socket-notify';
+        API.sendMessage('socket-notify', data);
     }
 
     onDisconnect(reason) {
         console.log("Disconnected from server (WebSocket):", reason);
         API.sendMessage('socket-status', { status: 'disconnected' });
-
-        if (this.isClosed) return;
+        this.socket.close();
+        this.socket = null;
 
         if (this.reconnectAttempts < this.maxReconnectAttempts) {
             this.reconnectAttempts++;

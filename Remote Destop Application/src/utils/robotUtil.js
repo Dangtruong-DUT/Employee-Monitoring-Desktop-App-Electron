@@ -20,11 +20,14 @@ class RobotHandler {
         if (this.isValidNumber(x) && this.isValidNumber(y)) {
             try {
                 robot.moveMouse(x, y);
+                setTimeout(() => {
+                    
+                }, 50);
             } catch (error) {
-                console.error("Lỗi khi xử lý di chuyển chuột:", error);
+                console.error("loi xu ly di chuyen chuot:", error);
             }
         } else {
-            console.warn("Dữ liệu không hợp lệ cho handleMouseMove:", data);
+            console.warn("du lieu khong hop le cho handleMouseMove:", data);
         }
     }
 
@@ -35,26 +38,28 @@ class RobotHandler {
             try {
                 robot.mouseClick(button, double);
             } catch (error) {
-                console.error("Lỗi khi xử lý click chuột:", error);
+                console.error("loi xu ly click chuot:", error);
             }
         } else {
-            console.warn("Dữ liệu không hợp lệ cho handleMouseClick:", data);
+            console.warn("du lieu khong hop le cho handleMouseClick:", data);
         }
     }
 
     handleMouseScroll(data) {
+        console.log("handleMouseScroll");   
         if (this.isClosed) return;
-        const { x = 0, y = 0 } = data || {};
+        const { x , y  } = data || {};
+        robot.scrollMouse(x, y);
         if (this.isValidNumber(x) && this.isValidNumber(y)) {
             try {
-                robot.scrollMouse(x, y);
+                
             } catch (error) {
-                console.error("Lỗi khi xử lý cuộn chuột:", error);
+                console.error("loi xu ly cuon chuot:", error);
             }
         } else {
-            console.warn("Dữ liệu không hợp lệ cho handleMouseScroll:", data);
+            console.warn("du lieu khong hop le cho handleMouseScroll:", data);
         }
-    }
+    }qqwerwaWE
 
     handleMouseDown(data) {
         if (this.isClosed) return;
@@ -64,13 +69,12 @@ class RobotHandler {
                 robot.mouseToggle('down', button);
                 if (button === 'left') this.isDragging = true;
             } catch (error) {
-                console.error("Lỗi khi xử lý nhấn giữ chuột:", error);
+                console.error("loi xu ly nhan giu chuot:", error);
             }
         } else {
-            console.warn("Dữ liệu không hợp lệ cho handleMouseDown:", data);
+            console.warn("du lieu khong hop le cho handleMouseDown:", data);
         }
     }
-
     handleMouseUp(data) {
         if (this.isClosed) return;
         const { button = 'left' } = data || {};
@@ -79,10 +83,10 @@ class RobotHandler {
                 robot.mouseToggle('up', button);
                 if (button === 'left') this.isDragging = false;
             } catch (error) {
-                console.error("Lỗi khi xử lý thả chuột:", error);
+                console.error("loi xu ly thả chuột:", error);
             }
         } else {
-            console.warn("Dữ liệu không hợp lệ cho handleMouseUp:", data);
+            console.warn("du lieu khong hop le cho handleMouseUp:", data);
         }
     }
 
@@ -93,38 +97,40 @@ class RobotHandler {
             try {
                 robot.keyTap(key);
             } catch (error) {
-                console.error("Lỗi khi xử lý gõ phím:", error);
+                console.error("loi xu ly go phim:", error);
             }
         } else {
-            console.warn("Phím không hợp lệ:", key);
+            console.warn("phim khong hop le:", key);
         }
     }
 
     handleKeyDown(data) {
         if (this.isClosed) return;
         const { key } = data || {};
+        console.log(data)
         if (typeof key === 'string' && key.trim()) {
             try {
-                robot.keyToggle(key, 'down');
+                robot.keyToggle(key.toLowerCase(), 'down'); // Chuyển về chữ thường
             } catch (error) {
-                console.error("Lỗi khi xử lý nhấn phím:", error);
+                console.error("loi xu ly nhan phim:", error);
             }
         } else {
-            console.warn("Phím không hợp lệ:", key);
+            console.warn("phim khong hop le:", key);
         }
     }
 
     handleKeyUp(data) {
         if (this.isClosed) return;
         const { key } = data || {};
+        console.log(data)
         if (typeof key === 'string' && key.trim()) {
             try {
-                robot.keyToggle(key, 'up');
+                robot.keyToggle(key.toLowerCase(), 'down'); // Chuyển về chữ thường
             } catch (error) {
-                console.error("Lỗi khi xử lý nhả phím:", error);
+                console.error("loi xu ly nhan phim:", error);
             }
         } else {
-            console.warn("Phím không hợp lệ:", key);
+            console.warn("phim khong hop le:", key);
         }
     }
 
@@ -134,7 +140,7 @@ class RobotHandler {
             this.isDragging = true;
             this.handleMouseDown({ button: 'left' });
         } catch (error) {
-            console.error("Lỗi khi xử lý bắt đầu kéo:", error);
+            console.error("loi xu ly bat dau keo:", error);
         }
     }
 
@@ -149,7 +155,7 @@ class RobotHandler {
             this.isDragging = false;
             this.handleMouseUp({ button: 'left' });
         } catch (error) {
-            console.error("Lỗi khi xử lý kết thúc kéo:", error);
+            console.error("loi xu ly ket thuc keo:", error);
         }
     }
 
@@ -158,4 +164,4 @@ class RobotHandler {
         this.handleMouseScroll(data);
     }
 }
-export default RobotHandler;
+module.exports = RobotHandler;
