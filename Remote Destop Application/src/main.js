@@ -217,6 +217,7 @@ ipcMain.on("robot-event", (event, { type, data }) => {
 });
 
 let currentApp=null;
+
 async function getActiveAppDetails() {
     const window = await activeWin();
     if (!window) {
