@@ -15,6 +15,7 @@ const {
 let win = null;
 const  RobotHandler = require('./utils/robotUtil.js');
 const robot = new RobotHandler();
+let intervalMonitor;
 
 const createBrowserWindow = () => {
     win = new BrowserWindow({
@@ -81,7 +82,7 @@ app.on('window-all-closed', () => {
     if (process.platform !== 'darwin') app.quit();
 });
 
-// Định nghĩa các handler IPC
+// Định nghĩa các handler IPC+
 ipcMain.handle('login', async (event, user) => {
     try {
         const loginData = await login(user);
@@ -89,6 +90,10 @@ ipcMain.handle('login', async (event, user) => {
         const { departmentDTOs: Departments, ...PersonInfor } = userInfo.data;
         PersonInfor.token = loginData.data.token;
         win.webContents.send('login-success');
+        
+        intervalMonitor= setInterval(() => {
+            getActiveAppDetails();
+        }, 7000);
         return { 
             success: true, 
             data: { 
@@ -162,6 +167,11 @@ ipcMain.on('socket-notify', (event, data) => {
     win.webContents.send('socket-notify',data);
 });
 
+ipcMain.on('CloseSocket', (event, data) => {
+    win.webContents.send('CloseSocket',data);
+});
+
+
 
 ipcMain.on("robot-event", (event, { type, data }) => {
     switch (type) {
@@ -206,28 +216,33 @@ ipcMain.on("robot-event", (event, { type, data }) => {
     }
 });
 
+let currentApp=null;
 async function getActiveAppDetails() {
-    const window = await activeWin(); 
+    const window = await activeWin();
     if (!window) {
         return null;
     }
     // active app
     const app = window.owner.name;
-    let domain="";
+    let domain=null;
 
-    if (app.toLowerCase().includes('chrome') 
-        || app.toLowerCase().includes('firefox') 
+    if (app.toLowerCase().includes('chrome')
+        || app.toLowerCase().includes('firefox')
         || app.toLowerCase().includes('edge')) {
-        
-        robot1.keyTap('l', 'control');
-        robot1.keyTap('c', 'control'); 
-        domain = clipboard.readText(); 
+    
+        // robot1.keyTap('l', 'control');
+        // robot1.keyTap('c', 'control');
+        // domain = clipboard.readText();
+        const title = window?.title || '';
+       domain =  title.split('-')[0];
     }
-    win.webContents.send('active-app',{app,domain});
+    const content = domain||app;
+
+    if(currentApp!=content){
+        currentApp=content;
+        win.webContents.send('active-app',{content});
+    }
 }
 
-setInterval(() => {
-    getActiveAppDetails();
-}, 10000);
 
 

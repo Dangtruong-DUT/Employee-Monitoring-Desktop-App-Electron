@@ -17,7 +17,7 @@ const filterNotifications = (notifications, allowedDays) => {
    const currentDate = new Date();
    return notifications.filter(notification => {
       const notificationDate = parseDate(notification.date);
-      return daysBetween(notificationDate, currentDate) <= allowedDays;
+      return notification.isUnRead == true&&daysBetween(notificationDate, currentDate) <= allowedDays;
    });
 };
 
@@ -67,9 +67,11 @@ const actions = {
       state.PersonInfor = personInfor;
       controller(HomePage);
    },
-   LOGOUT({ States }, Login, FORMLOGINOBJECT) {
+   LOGOUT({ States,GeneralNotice,NotiSession }, Login, FORMLOGINOBJECT) {
       States.isLoggedIn = false;
       controller(Login, Validator, FORMLOGINOBJECT);
+      storage.setNotiSession(NotiSession);
+      storage.setGeneralNotice(GeneralNotice);
    },
    GOTOINDEXPAGE({ homePage }, indexPage) {
       homePage.indexPage = indexPage;
@@ -78,9 +80,11 @@ const actions = {
       GeneralNotice.forEach(element => {
          element.isUnRead = false;
       });
+      storage.setGeneralNotice(GeneralNotice);
    },
    READNOTIGENERAL({ GeneralNotice }, indexNoti) {
       GeneralNotice[indexNoti].isUnRead = false;
+      storage.setGeneralNotice(GeneralNotice);
    },
    EXITDEPART({ Departments }, idToDelete) {
       const index = Departments.findIndex(department => department.id == idToDelete);
@@ -155,13 +159,14 @@ const actions = {
          }
       )
    },
-   NEWNOTIFYSESSION( {NotiSession,addDateToObject,render,homePage},noti) {
+   NEWNOTIFYSESSION( {NotiSession,addDateToObject,render},noti) {
       render.isRender = false;
+      noti.isUnRead = true;
       addDateToObject(noti);
       NotiSession.push(noti);
       storage.setNotiSession(NotiSession);
    },
-   NEWNOTIFY({GeneralNotice,addDateToObject,render,homePage},noti ) {
+   NEWNOTIFY({GeneralNotice,addDateToObject,render},noti ) {
       render.isRender = false;
       addDateToObject(noti);
       noti.isUnRead = true;

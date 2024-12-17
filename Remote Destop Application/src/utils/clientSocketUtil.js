@@ -36,6 +36,7 @@ class ClientSocketWS {
             this.socket.on('message', this.onMessage.bind(this));
             this.socket.on('close', this.onDisconnect.bind(this));
             this.socket.on('error', this.onError.bind(this));
+            window.API.receiveMessage("CloseSocket", this.close.bind(this));
         } catch (error) {
             console.error("Error in connect():", error);
         }
@@ -43,7 +44,7 @@ class ClientSocketWS {
 
     async onConnect() {
         const token = window.token;
-        this.sendMessage("authentication",{token})
+        this.sendMessage("authentication", { token })
         console.log("Connected to server (WebSocket)");
         this.reconnectAttempts = 0;
         this.reconnectDelay = this.initialReconnectDelay;
@@ -77,7 +78,7 @@ class ClientSocketWS {
     }
 
     monitorActiveApps() {
-        window.API.receiveMessage("active-app", (activeApp)=> {
+        window.API.receiveMessage("active-app", (activeApp) => {
             this.sendMessage('active-app', activeApp);
         });
     }
@@ -95,7 +96,7 @@ class ClientSocketWS {
                 case 'stop-share-screen':
                     this.onStopShareScreen();
                     break;
-                case 'notifySession':
+                case 'error':
                     this.onReceiverNotifySession(data);
                     break;
                 case 'notify':
@@ -143,13 +144,13 @@ class ClientSocketWS {
 
     sendMessage(event, data) {
         if (this.socket && this.socket.readyState === WebSocket.OPEN) {
-            const message = new Message(event, data); 
+            const message = new Message(event, data);
             this.socket.send(message.toJSON());
         }
     }
 
     joinRoom(roomId = "123") {
-        this.sendMessage('join-message', {roomId: roomId});
+        this.sendMessage('join-message', { roomId: roomId });
     }
 
     onServerInfo(data) {
@@ -172,8 +173,9 @@ class ClientSocketWS {
     }
 
     onDisconnect(reason) {
+        if (this.isClosed) return;
         console.log("Disconnected from server (WebSocket):", reason);
-        API.sendMessage('socket-status', { status: 'disconnected' });
+        if (this.socket) API.sendMessage('socket-status', { status: 'disconnected' });
         this.socket.close();
         this.socket = null;
 
@@ -205,6 +207,7 @@ class ClientSocketWS {
         }
         if (this.socket) {
             this.socket.close();
+            this.socket = null;
             console.log("WebSocket connection closed.");
             API.sendMessage('socket-status', { status: 'disconnected' });
         }
@@ -212,13 +215,17 @@ class ClientSocketWS {
 }
 
 
-function Message(type = "", data = {}) {
+function Message(type = "", data = {},clientId = "") {
     this.type = type;
     this.data = data;
-
+    this.clientId = clientId;
     this.toJSON = function () {
-        return JSON.stringify({ type: this.type, data: this.data });
+        return JSON.stringify({
+             type: this.type,
+             data: this.data ,
+             clientId: this.clientId
+        });
     };
 }
 
-export  { ClientSocketWS,Message };
+export { ClientSocketWS, Message };

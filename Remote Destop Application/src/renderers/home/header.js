@@ -147,13 +147,7 @@ export const HeaderEvents = function (event) {
     if (comboboxItem) {
         let indexPage = comboboxItem.dataset.indexpage;
         if (indexPage == '-1') {
-            window.API.closeSocket()
-            .then(() => {
-                console.log('Close socket successful');
-            })
-            .catch(()=> {
-                console.log('Close socket error');
-            })
+            window.API.closeSocket();
             dispatch('LOGOUT', login);
         }
         else {

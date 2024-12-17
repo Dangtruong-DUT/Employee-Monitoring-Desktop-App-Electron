@@ -28,12 +28,15 @@ class WebRTCUtil {
     createPeerConnection() {
         this.peerConnection = new RTCPeerConnection(this.configuration);
         this.listenEventControll();
-        this.peerConnection.onconnectionstatechange = () => {
-            console.log("Trang Thai ket noi:", this.peerConnection.connectionState);
-        };
+        
+        // lang nghe trang thai ket noi
+        this.peerConnection.oniceconnectionstatechange = () => {
+            const state = this.peerConnection.iceConnectionState;
+            console.log("ICE connection state:", state);
 
-        this.peerConnection.ontrack = (event) => {
-            console.log("track tu xa nhan duoc:", event.streams[0]);
+            if ( state === 'closed') {
+                this.stopStreaming()
+            }
         };
 
         if (this.localStream) {
