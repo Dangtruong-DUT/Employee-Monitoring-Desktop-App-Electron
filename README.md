@@ -51,4 +51,4 @@ WebRTC kết hợp với robotJS. Mô hình tổ chức như sau:
 - B4: "npm start" vào terminal để khởi chạy dự án.
 
 # DEMO
-![Video](../Code/remote%20desktop%202024-12-17%2017-29-40.mp4)
+Bạn có thể xem video tại [Google Drive](https://drive.google.com/file/d/1LFHevCN3izQ0KkZy2pdX2aWAAtcgY-qT/view?usp=drive_link)
