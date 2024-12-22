@@ -1,3 +1,6 @@
+
+## DEMO
+Bạn có thể xem video demo của dự án tại [Google Drive](https://drive.google.com/file/d/1LFHevCN3izQ0KkZy2pdX2aWAAtcgY-qT/view?usp=drive_link).
 # Ứng Dụng Giám Sát Nhân Viên
 
 ## Giới Thiệu Chung
@@ -62,5 +65,3 @@
     npm start
     ```
 
-## DEMO
-Bạn có thể xem video demo của dự án tại [Google Drive](https://drive.google.com/file/d/1LFHevCN3izQ0KkZy2pdX2aWAAtcgY-qT/view?usp=drive_link).
