@@ -57,7 +57,7 @@ function pageAdminSettings({PersonInfor,Departments,Server,States,EventLogs,filt
                                 <div class="group__content">
                                     <div class="group__item">
                                         <div class="group__item-title">Admin</div>
-                                        <div class="group__item-content">${(States.isAccessServer&&Server?.admin)||'_____'}</div>
+                                        <div class="group__item-content">${(States.isAccessServer&&Server?.admin)||'Nhật Tuấn'}</div>
                                     </div>
                                     <div class="group__item">
                                         <div class="group__item-title">Trạng thái kết nối</div>

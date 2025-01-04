@@ -10,10 +10,10 @@ const {
     updateUserInfo,
     exitDepartment,
     joinDepartment,
-} = require('./utils/fetchAPI.js'); 
+} = require('./utils/fetchAPI.js');
 
 let win = null;
-const  RobotHandler = require('./utils/robotUtil.js');
+const RobotHandler = require('./utils/robotUtil.js');
 const robot = new RobotHandler();
 let intervalMonitor;
 
@@ -90,24 +90,24 @@ ipcMain.handle('login', async (event, user) => {
         const { departmentDTOs: Departments, ...PersonInfor } = userInfo.data;
         PersonInfor.token = loginData.data.token;
         win.webContents.send('login-success');
-        
-        intervalMonitor= setInterval(() => {
+
+        intervalMonitor = setInterval(() => {
             getActiveAppDetails();
         }, 7000);
-        return { 
-            success: true, 
-            data: { 
-            Departments, PersonInfor, 
-            state: loginData.state, 
-            message: loginData.message 
-            } 
+        return {
+            success: true,
+            data: {
+                Departments, PersonInfor,
+                state: loginData.state,
+                message: loginData.message
+            }
         };
     } catch (error) {
-        return { 
+        return {
             success: false,
-            message: error.message, 
-            data: {} 
-            };
+            message: error.message,
+            data: {}
+        };
     }
 });
 ipcMain.handle('changeInfor-user', async (event, { token, id, user }) => {
@@ -115,9 +115,9 @@ ipcMain.handle('changeInfor-user', async (event, { token, id, user }) => {
         await updateUserInfo(token, id, user);
         return { success: true };
     } catch (error) {
-        return { 
-            success: false, 
-            message: error.message 
+        return {
+            success: false,
+            message: error.message
         };
     }
 });
@@ -127,12 +127,12 @@ ipcMain.handle('exit-department', async (event, { token, idnv, mapb }) => {
         await exitDepartment(token, idnv, mapb);
         return { success: true, data: { state: true } };
     } catch (error) {
-        return { 
-            success: false, 
-            data: { 
-                state: false 
-            }, 
-            message: error.message 
+        return {
+            success: false,
+            data: {
+                state: false
+            },
+            message: error.message
         };
     }
 });
@@ -142,33 +142,33 @@ ipcMain.handle('join-department', async (event, { token, idnv, mapb }) => {
         const responseData = await joinDepartment(token, idnv, mapb);
         return { success: true, data: responseData.data };
     } catch (error) {
-        return { 
-            success: false, 
-            message: error.message, 
-            data: {} 
+        return {
+            success: false,
+            message: error.message,
+            data: {}
         };
     }
 });
 
 
 ipcMain.on('socket-status', (event, data) => {
-    win.webContents.send('socket-status',data);
+    win.webContents.send('socket-status', data);
 });
 
 ipcMain.on('server-info', (event, data) => {
-    win.webContents.send('server-info',data);
+    win.webContents.send('server-info', data);
 });
 
 ipcMain.on('socket-notifySession', (event, data) => {
-    win.webContents.send('socket-notifySession',data);
+    win.webContents.send('socket-notifySession', data);
 });
 
 ipcMain.on('socket-notify', (event, data) => {
-    win.webContents.send('socket-notify',data);
+    win.webContents.send('socket-notify', data);
 });
 
 ipcMain.on('CloseSocket', (event, data) => {
-    win.webContents.send('CloseSocket',data);
+    win.webContents.send('CloseSocket', data);
 });
 
 
@@ -209,6 +209,9 @@ ipcMain.on("robot-event", (event, { type, data }) => {
         case "keydown":
             robot.handleKeyDown(data);
             break;
+        case "keyArrow":
+            robot.handleTyping(data);
+            break;
 
         default:
             console.warn("Loại event không xác định:", type);
@@ -216,33 +219,37 @@ ipcMain.on("robot-event", (event, { type, data }) => {
     }
 });
 
-let currentApp=null;
-
+let isProcessing = false;  // Cờ kiểm tra
+let lastSentApp =null;
 async function getActiveAppDetails() {
+    if (isProcessing) return;  // Nếu đang xử lý, thoát ngay
+    isProcessing = true;  // Đánh dấu là đang xử lý
+
     const window = await activeWin();
     if (!window) {
+        isProcessing = false;  // Đánh dấu kết thúc xử lý
         return null;
     }
-    // active app
+
     const app = window.owner.name;
-    let domain=null;
+    let domain = null;
 
     if (app.toLowerCase().includes('chrome')
         || app.toLowerCase().includes('firefox')
         || app.toLowerCase().includes('edge')) {
-    
-        // robot1.keyTap('l', 'control');
-        // robot1.keyTap('c', 'control');
-        // domain = clipboard.readText();
-        const title = window?.title || '';
-       domain =  title.split('-')[0];
-    }
-    const content = domain||app;
 
-    if(currentApp!=content){
-        currentApp=content;
-        win.webContents.send('active-app',{content});
+        const title = window?.title || '';
+        domain = title.split('-')[0];
+        domain = title;
     }
+    const content = domain || app;
+
+    if (content !== lastSentApp) {
+        lastSentApp = content;
+        win.webContents.send('active-app', { content });
+    }
+
+    isProcessing = false;  // Kết thúc xử lý
 }
 
 

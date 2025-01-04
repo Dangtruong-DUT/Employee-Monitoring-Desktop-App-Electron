@@ -21,7 +21,7 @@ class RobotHandler {
             try {
                 robot.moveMouse(x, y);
                 setTimeout(() => {
-                    
+
                 }, 50);
             } catch (error) {
                 console.error("loi xu ly di chuyen chuot:", error);
@@ -46,20 +46,20 @@ class RobotHandler {
     }
 
     handleMouseScroll(data) {
-        console.log("handleMouseScroll");   
+        console.log("handleMouseScroll");
         if (this.isClosed) return;
-        const { x , y  } = data || {};
+        const { x, y } = data || {};
         robot.scrollMouse(x, y);
         if (this.isValidNumber(x) && this.isValidNumber(y)) {
             try {
-                
+
             } catch (error) {
                 console.error("loi xu ly cuon chuot:", error);
             }
         } else {
             console.warn("du lieu khong hop le cho handleMouseScroll:", data);
         }
-    }qqwerwaWE
+    } qqwerwaWE
 
     handleMouseDown(data) {
         if (this.isClosed) return;
@@ -108,7 +108,7 @@ class RobotHandler {
         if (this.isClosed) return;
         const { key } = data || {};
         console.log(data)
-        if (typeof key === 'string' && key.trim()) {
+        if (typeof key === 'string' && key.trim() && key != "Unidentified") {
             try {
                 robot.keyToggle(key.toLowerCase(), 'down'); // Chuyển về chữ thường
             } catch (error) {
@@ -123,7 +123,7 @@ class RobotHandler {
         if (this.isClosed) return;
         const { key } = data || {};
         console.log(data)
-        if (typeof key === 'string' && key.trim()) {
+        if (typeof key === 'string' && key.trim() && key != "Unidentified") {
             try {
                 robot.keyToggle(key.toLowerCase(), 'down'); // Chuyển về chữ thường
             } catch (error) {
