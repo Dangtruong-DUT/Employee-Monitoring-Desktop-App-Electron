@@ -122,3 +122,22 @@ This ensures a clean separation between logic and UI, making the app easy to mai
    ```bash
    npm start
    ```
+---
+##📁 Project Structure
+```
+src/
+├── components/     # Shared UI components
+├── pages/          # Application pages
+├── hooks/          # Custom React hooks
+├── context/        # React Context for global state
+├── services/       # API interaction logic
+├── locales/        # i18n translation files
+├── routes/         # Route definitions
+└── utils/          # Utility functions
+```
+---
+##🤝 Contributing
+Feel free to open Issues or submit a Pull Request if you find bugs or have feature suggestions.
+
+##📄 License
+MIT License — see the LICENSE file for details.
