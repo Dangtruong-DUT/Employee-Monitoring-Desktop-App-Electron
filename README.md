@@ -1,76 +1,89 @@
-# Employee Monitoring Application
+# Employee Monitoring Desktop App (Electron)
 
-## DEMO  
-You can watch the project demo on [Google Drive](https://drive.google.com/file/d/1LFHevCN3izQ0KkZy2pdX2aWAAtcgY-qT/view?usp=drive_link) and  [Google Drive](https://drive.google.com/file/d/1bhWYnTLJQojC7CbPvZ9gOhMSZ06kVYQN/view?usp=drive_link).
-
----
-
-## Overview  
-This is an **employee monitoring application** that enables administrators to **remotely view and control employee computers**. This repository contains the **client-side (employee) application**, and does not include the server or admin application.
+## 🎬 DEMO  
+You can watch the project demo here:  
+- [Google Drive - Demo 1](https://drive.google.com/file/d/1LFHevCN3izQ0KkZy2pdX2aWAAtcgY-qT/view?usp=drive_link)  
+- [Google Drive - Demo 2](https://drive.google.com/file/d/1bhWYnTLJQojC7CbPvZ9gOhMSZ06kVYQN/view?usp=drive_link)
 
 ---
 
-## Core Technologies Used
+## 🧭 Overview
 
-- **Electron**: Framework for building cross-platform desktop applications.
-- **WebRTC**: Enables real-time screen sharing and P2P connections.
-- **WebSocket**: For real-time communication between client and server.
-- **fetchAPI + REST API**: Used for HTTP requests.
-- **JWT (JSON Web Token)**: For authentication between the client and server.
-- **RobotJS**: Used to remotely control the employee's keyboard and mouse.
-- **Plain JavaScript (Vanilla JS)**: The core application logic is built using plain JavaScript.
-- **Custom Redux-like Architecture**: Core state management and logic flow is structured using a custom lightweight Redux-style architecture.
+This is the **Electron-based desktop application for employees** in a corporate employee monitoring system. It enables administrators to **remotely monitor and control employee computers** in real time.
+
+> ⚠️ **Note:** This repository contains **only the Electron desktop app for employees**.  
+> The backend server and the admin (controller) interface are **not included here**.
 
 ---
 
-## Architecture Overview
+## 🔗 Backend Repository
+
+You can find the backend server source code at:  
+👉 https://github.com/GiaBaoNguyen7112004/RemoteDesktopControl-Backend
+
+---
+
+## ⚙️ Core Technologies Used
+
+- **Electron** – For building cross-platform desktop applications.
+- **WebRTC** – Enables real-time screen sharing and P2P connections.
+- **WebSocket** – Used for real-time communication with the server.
+- **fetchAPI + REST API** – For authentication and data exchange.
+- **JWT (JSON Web Token)** – Handles secure authentication between client and server.
+- **RobotJS** – Allows the server to remotely control the employee's mouse and keyboard.
+- **Vanilla JavaScript** – The app’s core logic is written in plain JavaScript.
+- **Custom Redux-like Architecture** – State management is handled via a custom lightweight Redux-style pattern.
+
+---
+
+## 🧱 Architecture Overview
 
 ### 🎯 Project Focus
 
-The core of the app is structured to **mimic Redux**, with:
+The app uses a custom state management system inspired by Redux:
 - A central store-like object.
-- Action-based dispatching and reducers-like flow.
-- Event-driven updates to components and logic.
+- Action-based dispatching and reducer-style logic.
+- Event-driven component updates.
 
-This allows **separation of logic and UI**, making it easier to maintain and extend.
+This ensures a clean separation between logic and UI, making the app easy to maintain and extend.
 
-### 🔌 How it works
+### 🔌 How it Works
 
 1. **Login Process**:
-   - Employee logs in via REST API with credentials.
-   - Receives a JWT token for authenticated requests.
-   - Establishes a WebSocket connection to the server using the token.
+   - Employees log in via REST API using their credentials.
+   - A JWT token is returned and stored for authenticated communication.
+   - A WebSocket connection is established using the token.
 
-2. **Computer Info Reporting**:
-   - Upon successful login, the client gathers machine information (RAM, OS, CPU, etc.) and sends it to the server.
-   - Periodically, it sends data on active application windows and browser URLs.
+2. **System Info Reporting**:
+   - After login, the client collects system data (RAM, OS, CPU, etc.) and sends it to the server.
+   - Periodic updates are sent with info on active windows and browser URLs.
 
-3. **WebSocket Communication**:
-   - Listens for server-side events:
-     - General company announcements.
-     - Violation reports (e.g., opening unauthorized apps or websites).
-     - Screen share requests from admin.
+3. **WebSocket Events**:
+   - Listens for:
+     - Company-wide announcements.
+     - Violation alerts (e.g., restricted apps or websites).
+     - Screen sharing requests from admin.
 
-4. **Remote Monitoring & Control**:
-   - Admin sends a `start-share-screen` event with department ID.
-   - The server multicasts the message to online employees in that department.
-   - A WebRTC handshake is established (via WebSocket signaling).
-   - Once connected, screen is shared and admin can **interact using RobotJS**.
+4. **Remote Control via WebRTC**:
+   - Admin sends a `start-share-screen` event.
+   - Server relays it to all online employees in the relevant department.
+   - A WebRTC connection is established for screen sharing.
+   - Admin can remotely control the employee's machine using RobotJS.
 
 ---
 
-## Key Features
+## 🚀 Key Features
 
 - 🔍 **Live screen monitoring** via WebRTC.
-- 🎮 **Remote control** of employee's computer using RobotJS.
-- 📡 **Real-time communication** with WebSocket.
-- 🚫 **Violation detection** for disallowed websites/apps.
-- 🧑‍💼 **Department and employee management**.
-- 🔐 **JWT Authentication** with REST API.
+- 🖱️ **Remote keyboard and mouse control** using RobotJS.
+- 📡 **Real-time WebSocket communication**.
+- 🚫 **Violation detection** for blocked apps or websites.
+- 🧑‍💼 **Employee and department management**.
+- 🔐 **Secure authentication** using JWT and REST API.
 
 ---
 
-## Project Structure
+## 📁 Project Structure
 
 ```
 📁 src/
