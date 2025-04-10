@@ -1,67 +1,111 @@
+# Employee Monitoring Application
 
-## DEMO
-Bạn có thể xem video demo của dự án tại [Google Drive](https://drive.google.com/file/d/1LFHevCN3izQ0KkZy2pdX2aWAAtcgY-qT/view?usp=drive_link).
-# Ứng Dụng Giám Sát Nhân Viên
+## DEMO  
+You can watch the project demo on [Google Drive](https://drive.google.com/file/d/1LFHevCN3izQ0KkZy2pdX2aWAAtcgY-qT/view?usp=drive_link) and  [Google Drive](https://drive.google.com/file/d/1bhWYnTLJQojC7CbPvZ9gOhMSZ06kVYQN/view?usp=drive_link).
 
-## Giới Thiệu Chung
-Đây là ứng dụng giám sát nhân viên, cho phép điều khiển máy tính nhân viên từ xa. Repo này là dự án phía nhân viên, chưa bao gồm server và ứng dụng phía admin.
+---
 
-## Công Nghệ Chính Sử Dụng
-- **WebRTC**: Giao thức truyền tải âm thanh, video và dữ liệu trực tuyến qua mạng.
-- **WebSocket**: Giao thức kết nối giữa máy khách và server để truyền tải dữ liệu trong thời gian thực.
-- **fetchAPI**: API để gửi và nhận dữ liệu từ server.
-- **robotJS**: Thư viện JavaScript cho phép điều khiển máy tính (chuột, bàn phím) từ xa.
+## Overview  
+This is an **employee monitoring application** that enables administrators to **remotely view and control employee computers**. This repository contains the **client-side (employee) application**, and does not include the server or admin application.
 
-## Mô Hình Tổ Chức Dự Án
+---
 
-- Nhân viên đăng nhập vào hệ thống, ứng dụng phía nhân viên thiết lập kết nối theo mô hình client-server thông qua WebSocket.
-- Sau khi server ghi nhận đăng nhập:
-    + Máy client gửi thông tin về máy tính đang sử dụng về server.
-    + Sau một chu kỳ thời gian nhất định, máy client gửi gói tin chứa thông tin cửa sổ ứng dụng đang sử dụng và địa chỉ URL của cửa sổ trình duyệt về server để xử lý.
-- Máy nhân viên nhận thông báo về phiên làm việc, báo cáo vi phạm và thông báo chung của công ty qua WebSocket.
-- Ngoài ra, ứng dụng có thể được điều khiển và giám sát màn hình từ xa bởi admin thông qua WebRTC kết hợp với RobotJS. Mô hình tổ chức như sau:
-    1. Admin gửi thông điệp `start-share-screen` tới server với ID phòng ban tương ứng.
-    2. Server gửi multicast tới các máy nhân viên trong phòng ban đó.
-    3. Chương trình phía nhân viên và admin trao đổi thông điệp để thiết lập kết nối WebRTC (theo mô hình client-server).
-    4. Server làm cầu nối trung gian và gửi thông điệp qua WebSocket.
-    5. WebRTC thiết lập thành công, và chương trình phía nhân viên và admin hoạt động với nhau qua mô hình P2P trong cùng mạng, thực hiện giám sát màn hình và điều khiển máy tính thông qua WebRTC.
+## Core Technologies Used
 
-## Vai Trò Trong Dự Án
-- **Admin**: Quản lý, giám sát và điều khiển máy tính nhân viên từ xa.
-- **Employee**: Thực hiện công việc và nhận các thông báo từ hệ thống.
+- **Electron**: Framework for building cross-platform desktop applications.
+- **WebRTC**: Enables real-time screen sharing and P2P connections.
+- **WebSocket**: For real-time communication between client and server.
+- **fetchAPI + REST API**: Used for HTTP requests.
+- **JWT (JSON Web Token)**: For authentication between the client and server.
+- **RobotJS**: Used to remotely control the employee's keyboard and mouse.
+- **Plain JavaScript (Vanilla JS)**: The core application logic is built using plain JavaScript.
+- **Custom Redux-like Architecture**: Core state management and logic flow is structured using a custom lightweight Redux-style architecture.
 
-## Chức Năng Chính
-- Giám sát máy tính từ xa.
-- Điều khiển máy tính từ xa.
-- Phân tích và thông báo lỗi khi nhân viên vào ứng dụng hoặc truy cập URL không được phép.
-- Quản lý phòng ban và nhân viên.
+---
 
-## Cấu Trúc Dự Án
+## Architecture Overview
 
-### **Server**
-- **Java Spring Boot**: Xử lý các yêu cầu từ client và quản lý kết nối WebSocket.
+### 🎯 Project Focus
 
-### **Client**
-- **Electron**: Framework xây dựng ứng dụng desktop cho nhân viên.
-- **WebRTC**: Giao thức kết nối P2P cho việc giám sát và điều khiển máy tính.
-- **FetchAPI**: Gửi yêu cầu API tới server.
-- **HTML, CSS, JavaScript**: Giao diện người dùng.
-- **RobotJS**: Thư viện điều khiển máy tính.
+The core of the app is structured to **mimic Redux**, with:
+- A central store-like object.
+- Action-based dispatching and reducers-like flow.
+- Event-driven updates to components and logic.
 
-## Hướng Dẫn Cài Đặt
+This allows **separation of logic and UI**, making it easier to maintain and extend.
 
-1. **Clone và pull dự án về máy**:
-    ```bash
-    git clone <repository_url>
-    cd <project_directory>
-    ```
-2. **Cài đặt các thư viện cần thiết**:
-    ```bash
-    npm i
-    ```
-3. **Cấu hình lại dự án tại file `.env`**: Điều chỉnh các thông số cấu hình cần thiết cho môi trường của bạn.
-4. **Chạy dự án**:
-    ```bash
-    npm start
-    ```
+### 🔌 How it works
 
+1. **Login Process**:
+   - Employee logs in via REST API with credentials.
+   - Receives a JWT token for authenticated requests.
+   - Establishes a WebSocket connection to the server using the token.
+
+2. **Computer Info Reporting**:
+   - Upon successful login, the client gathers machine information (RAM, OS, CPU, etc.) and sends it to the server.
+   - Periodically, it sends data on active application windows and browser URLs.
+
+3. **WebSocket Communication**:
+   - Listens for server-side events:
+     - General company announcements.
+     - Violation reports (e.g., opening unauthorized apps or websites).
+     - Screen share requests from admin.
+
+4. **Remote Monitoring & Control**:
+   - Admin sends a `start-share-screen` event with department ID.
+   - The server multicasts the message to online employees in that department.
+   - A WebRTC handshake is established (via WebSocket signaling).
+   - Once connected, screen is shared and admin can **interact using RobotJS**.
+
+---
+
+## Key Features
+
+- 🔍 **Live screen monitoring** via WebRTC.
+- 🎮 **Remote control** of employee's computer using RobotJS.
+- 📡 **Real-time communication** with WebSocket.
+- 🚫 **Violation detection** for disallowed websites/apps.
+- 🧑‍💼 **Department and employee management**.
+- 🔐 **JWT Authentication** with REST API.
+
+---
+
+## Project Structure
+
+```
+📁 src/
+├── assets/         # Static assets (images, fonts, etc.)
+├── js/             # Common JavaScript files or core logic
+├── preloads/       # Electron preload scripts (for secure main <-> renderer communication)
+├── redux/          # Redux state management (actions, reducers, store)
+├── renderers/      # Electron renderer process code (User Interface - UI)
+├── utils/          # Utility functions and helper modules
+└── main.js         # Electron main process entry point (app lifecycle, windows)
+
+📁 Public
+   └── index.html         # Main UI container
+.env                      # Configuration (server URL, ports, etc.)
+```
+
+---
+
+## Installation Guide
+
+1. **Clone the project**:
+   ```bash
+   git clone <repository_url>
+   cd <project_directory>
+   ```
+
+2. **Install dependencies**:
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**:
+   - Create and modify your `.env` file to include necessary configurations (API URLs, WebSocket address, ports, etc.)
+
+4. **Run the application**:
+   ```bash
+   npm start
+   ```
